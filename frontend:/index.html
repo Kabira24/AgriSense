@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AgriSense AI – Crop Prediction &amp; Farm Advisor</title>
+  <meta name="description" content="AI-powered crop recommendation engine and Gemini-powered farm advisor. Enter your soil and weather data to discover the best crops to grow and get plain-language farming advice." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Animated background blobs -->
+  <div class="bg-blobs" aria-hidden="true">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <!-- Floating particles -->
+  <canvas id="particle-canvas" aria-hidden="true"></canvas>
+
+  <div class="dashboard-container">
+    <!-- Left Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <span class="brand-icon">🌾</span>
+        <span class="brand-text">AgriSense <span class="brand-ai">AI</span></span>
+      </div>
+
+      <nav class="sidebar-menu">
+        <a href="#" class="menu-item active" data-tab="dashboard">
+          <span class="menu-icon">📊</span> Dashboard
+        </a>
+        <a href="#" class="menu-item" data-tab="analysis">
+          <span class="menu-icon">🧪</span> Crop Analysis
+        </a>
+        <a href="#" class="menu-item" data-tab="planner">
+          <span class="menu-icon">📅</span> Planner
+        </a>
+        <a href="#" class="menu-item" data-tab="health">
+          <span class="menu-icon">⚙️</span> System Health
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="header-badge">
+          <span class="status-dot" id="status-dot"></span>
+          <span id="status-label">Connecting…</span>
+        </div>
+        <p class="project-info">FYP Project Review · 2026</p>
+      </div>
+    </aside>
+
+    <!-- Right Content Area -->
+    <main class="main-content">
+      <header class="content-header">
+        <h1 id="page-title">Dashboard Overview</h1>
+      </header>
+
+      <!-- ── TAB 1: Dashboard Overview ───────────────────────────────────────── -->
+      <div class="tab-pane active" id="tab-dashboard">
+        <!-- KPI Row -->
+        <div class="kpi-grid">
+          <div class="glass-card kpi-card">
+            <div class="kpi-icon-wrap primary">🎯</div>
+            <div class="kpi-details">
+              <span class="kpi-label">Model Accuracy</span>
+              <span class="kpi-val">98.2%</span>
+            </div>
+          </div>
+          <div class="glass-card kpi-card">
+            <div class="kpi-icon-wrap secondary">🌱</div>
+            <div class="kpi-details">
+              <span class="kpi-label">Supported Crops</span>
+              <span class="kpi-val">22 Types</span>
+            </div>
+          </div>
+          <div class="glass-card kpi-card">
+            <div class="kpi-icon-wrap advisor">🤖</div>
+            <div class="kpi-details">
+              <span class="kpi-label">AI Engine</span>
+              <span class="kpi-val">Gemini 1.5</span>
+            </div>
+          </div>
+          <div class="glass-card kpi-card">
+            <div class="kpi-icon-wrap accent">💻</div>
+            <div class="kpi-details">
+              <span class="kpi-label">Architecture</span>
+              <span class="kpi-val">FastAPI Micro</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-main-grid">
+          <!-- Farm Health Score Card -->
+          <div class="glass-card farm-health-card">
+            <div class="health-score-header">
+              <h2 class="health-score-title">🧑‍🌾 Farm Soil &amp; Climate Health</h2>
+              <p class="health-score-sub">Calibrated based on pH, Temperature and Moisture inputs</p>
+            </div>
+            
+            <div class="health-score-body">
+              <!-- Radial Gauge -->
+              <div class="gauge-container">
+                <svg class="gauge-svg" viewBox="0 0 160 160">
+                  <defs>
+                    <linearGradient id="health-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#10b981" />
+                      <stop offset="100%" stop-color="#3b82f6" />
+                    </linearGradient>
+                  </defs>
+                  <circle class="gauge-track" cx="80" cy="80" r="70" />
+                  <circle class="gauge-fill" id="health-gauge-fill" cx="80" cy="80" r="70" />
+                </svg>
+                <div class="gauge-text">
+                  <span class="score-number" id="health-score-number">--</span>
+                  <span class="score-label" id="health-score-status">Pending</span>
+                </div>
+              </div>
+
+              <!-- Parameter Breakdown -->
+              <div class="sub-scores-list">
+                <div class="sub-score-item">
+                  <div class="sub-score-meta">
+                    <span class="sub-score-name">Soil pH Level</span>
+                    <span class="sub-score-val" id="health-ph-val">--</span>
+                  </div>
+                  <div class="sub-score-bar-track">
+                    <div class="sub-score-bar-fill ph-fill" id="health-ph-bar"></div>
+                  </div>
+                </div>
+                
+                <div class="sub-score-item">
+                  <div class="sub-score-meta">
+                    <span class="sub-score-name">Temperature Suitability</span>
+                    <span class="sub-score-val" id="health-temp-val">--</span>
+                  </div>
+                  <div class="sub-score-bar-track">
+                    <div class="sub-score-bar-fill temp-fill" id="health-temp-bar"></div>
+                  </div>
+                </div>
+
+                <div class="sub-score-item">
+                  <div class="sub-score-meta">
+                    <span class="sub-score-name">Moisture Index</span>
+                    <span class="sub-score-val" id="health-moisture-val">--</span>
+                  </div>
+                  <div class="sub-score-bar-track">
+                    <div class="sub-score-bar-fill moisture-fill" id="health-moisture-bar"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Welcome & Shortcut Card -->
+          <div class="glass-card project-welcome-card">
+            <h2 class="health-score-title">🚀 Crop Analytics Platform</h2>
+            <p class="welcome-desc">
+              AgriSense AI helps you analyze soil biochemistry and climate configurations to recommend high-yielding crops, calculate market cost-revenues, assess agronomic risks, and generate operational calendars.
+            </p>
+            
+            <a href="#" class="shortcut-btn" id="shortcut-predict-btn">
+              <span>Run Crop Predictor</span>
+              <span class="shortcut-arrow">🧪 →</span>
+            </a>
+            <a href="#" class="shortcut-btn" id="shortcut-planner-btn">
+              <span>View Operations Calendar</span>
+              <span class="shortcut-arrow">📅 →</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── TAB 2: Crop Analysis ────────────────────────────────────────────── -->
+      <div class="tab-pane" id="tab-analysis">
+        <div class="analysis-grid">
+          <!-- Left Column: Input Form -->
+          <div class="glass-card soil-form-card">
+            <div class="form-title-bar">
+              <span class="logo-icon">🧪</span>
+              <h2>Soil &amp; Climate Profiler</h2>
+            </div>
+            
+            <form id="predict-form" novalidate>
+              <!-- Weather Widget (Location autofill) -->
+              <div class="weather-widget" id="weather-widget" style="margin-bottom: 20px;">
+                <div class="weather-widget-header">
+                  <span class="ww-icon">🌤️</span>
+                  <div>
+                    <p class="ww-title">Auto-fill via Location</p>
+                    <p class="ww-sub">Fetch weather parameters from Open-Meteo API</p>
+                  </div>
+                  <button type="button" class="ww-toggle" id="ww-toggle" aria-expanded="false">
+                    Show <span class="ww-chevron">▸</span>
+                  </button>
+                </div>
+
+                <div class="ww-body" id="ww-body" hidden>
+                  <div class="ww-search-row">
+                    <div class="ww-input-wrap">
+                      <span class="ww-search-icon">🔍</span>
+                      <input
+                        type="text" id="ww-city" class="ww-city-input"
+                        placeholder="City name (e.g. Pune)"
+                        autocomplete="off"
+                      />
+                      <input
+                        type="text" id="ww-country" class="ww-country-input"
+                        placeholder="IN"
+                        maxlength="4"
+                      />
+                    </div>
+                    <button type="button" class="ww-fetch-btn" id="ww-fetch-btn">Fetch</button>
+                  </div>
+
+                  <!-- Status / Results bar -->
+                  <div class="ww-status" id="ww-status" hidden></div>
+
+                  <!-- Filled Chip -->
+                  <div class="ww-filled" id="ww-filled" hidden>
+                    <span class="ww-filled-icon">✅</span>
+                    <span class="ww-filled-text" id="ww-filled-text"></span>
+                    <button type="button" class="ww-clear-btn" id="ww-clear-btn">✕ Clear</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Inputs -->
+              <div class="predictor-form-grid">
+                <div class="field-group" id="group-ph">
+                  <label for="ph" class="field-label">🧪 Soil pH</label>
+                  <div class="input-wrap">
+                    <input type="number" id="ph" name="ph" placeholder="e.g. 6.5" min="0" max="14" step="0.1" class="field-input" required />
+                    <span class="field-unit">0 – 14</span>
+                  </div>
+                  <div class="slider-row">
+                    <input type="range" id="ph-slider" min="0" max="14" step="0.1" value="6.5" class="range-input" />
+                  </div>
+                  <span class="field-hint">Optimal pH for most plants: 5.5 – 7.5</span>
+                  <span class="field-error" id="err-ph"></span>
+                </div>
+
+                <div class="field-group" id="group-temperature">
+                  <label for="temperature" class="field-label">🌡️ Temperature</label>
+                  <div class="input-wrap">
+                    <input type="number" id="temperature" name="temperature" placeholder="e.g. 28" min="-10" max="60" step="0.1" class="field-input" required />
+                    <span class="field-unit">°C</span>
+                  </div>
+                  <div class="slider-row">
+                    <input type="range" id="temperature-slider" min="-10" max="60" step="0.1" value="28" class="range-input" />
+                  </div>
+                  <span class="field-hint">Average annual ambient temperature</span>
+                  <span class="field-error" id="err-temperature"></span>
+                </div>
+
+                <div class="field-group" id="group-humidity">
+                  <label for="humidity" class="field-label">💧 Humidity</label>
+                  <div class="input-wrap">
+                    <input type="number" id="humidity" name="humidity" placeholder="e.g. 82" min="0" max="100" step="0.1" class="field-input" required />
+                    <span class="field-unit">%</span>
+                  </div>
+                  <div class="slider-row">
+                    <input type="range" id="humidity-slider" min="0" max="100" step="0.1" value="82" class="range-input" />
+                  </div>
+                  <span class="field-hint">Relative humidity percentage</span>
+                  <span class="field-error" id="err-humidity"></span>
+                </div>
+
+                <div class="field-group" id="group-rainfall">
+                  <label for="rainfall" class="field-label">🌧️ Rainfall</label>
+                  <div class="input-wrap">
+                    <input type="number" id="rainfall" name="rainfall" placeholder="e.g. 120" min="0" max="5000" step="1" class="field-input" required />
+                    <span class="field-unit">mm</span>
+                  </div>
+                  <div class="slider-row">
+                    <input type="range" id="rainfall-slider" min="0" max="5000" step="1" value="120" class="range-input" />
+                  </div>
+                  <span class="field-hint">Annual precipitation in millimeters</span>
+                  <span class="field-error" id="err-rainfall"></span>
+                </div>
+              </div>
+
+              <!-- Presets -->
+              <div class="presets">
+                <span class="presets-label">Presets:</span>
+                <button type="button" class="preset-btn" data-preset="tropical">🌴 Tropical</button>
+                <button type="button" class="preset-btn" data-preset="semi-arid">☀️ Semi-Arid</button>
+                <button type="button" class="preset-btn" data-preset="temperate">🍃 Temperate</button>
+                <button type="button" class="preset-btn" data-preset="monsoon">⛈️ Monsoon</button>
+              </div>
+
+              <!-- Submit -->
+              <button type="submit" class="predict-btn" id="predict-btn">
+                <span class="btn-text">Analyze &amp; Recommend</span>
+                <span class="btn-icon">✦</span>
+                <div class="btn-shimmer"></div>
+              </button>
+            </form>
+          </div>
+
+          <!-- Right Column: Results Dashboard View -->
+          <div class="glass-card" style="padding: 24px; position: relative;">
+            <!-- Loading overlay -->
+            <div class="loading-overlay" id="loading-overlay" hidden>
+              <div class="loading-ring"></div>
+              <p class="loading-text">Analyzing soil &amp; climate parameters…</p>
+            </div>
+
+            <!-- Error panel -->
+            <div class="error-panel" id="error-panel" hidden>
+              <div class="error-icon">⚠️</div>
+              <p class="error-msg" id="error-msg"></p>
+              <button class="reset-btn" id="error-reset-btn" type="button">Try Again</button>
+            </div>
+
+            <!-- Empty State Placeholder -->
+            <div class="results-placeholder-card" id="results-placeholder">
+              <span class="placeholder-icon">🌱</span>
+              <h2 class="placeholder-title">Awaiting Soil Analysis</h2>
+              <p class="placeholder-desc">
+                Fill out the soil biochemistries on the left and run analysis to populate recommendations, market prices, and AI advisors here.
+              </p>
+            </div>
+
+            <!-- Results Panel (Active) -->
+            <div class="results-panel" id="results-panel" hidden>
+              <div class="results-header">
+                <h2 class="results-title">🌱 Crop Recommendations</h2>
+                <button class="reset-btn" id="reset-btn" type="button">New Analysis</button>
+              </div>
+
+              <div class="results-echo" id="results-echo"></div>
+
+              <!-- Recommendations List -->
+              <div class="crops-list" id="crops-list"></div>
+
+              <div class="confidence-note">
+                Confidence scores are computed via a Random Forest Classifier trained on 2,200 samples across 22 crops.
+              </div>
+
+              <!-- Weather strip section -->
+              <section class="weather-strip-section" id="weather-strip-section" hidden>
+                <div class="weather-strip-header">
+                  <span class="ws-icon">⛅</span>
+                  <span class="ws-title" id="ws-title">7-Day Forecast</span>
+                  <span class="ws-source">Open-Meteo</span>
+                </div>
+                <div class="weather-strip" id="weather-strip"></div>
+              </section>
+
+              <!-- Profit Estimate Section -->
+              <section class="profit-section" id="profit-section" hidden>
+                <div class="profit-section-header">
+                  <span class="profit-section-icon">💰</span>
+                  <h2 class="profit-section-title">Estimated Market Margins</h2>
+                  <span class="profit-section-badge">Agmarknet · CACP Cost-A2+FL</span>
+                </div>
+
+                <div class="profit-loading" id="profit-loading" hidden>
+                  <div class="profit-spinner"></div>
+                  <p class="profit-loading-text">Consulting Agmarknet prices…</p>
+                </div>
+
+                <div class="profit-card" id="profit-card"></div>
+
+                <div class="profit-error-box" id="profit-error" hidden>
+                  <span class="profit-error-icon">⚠️</span>
+                  <p class="profit-error-msg" id="profit-error-msg"></p>
+                </div>
+              </section>
+
+              <!-- Gemini Advisor panel -->
+              <button class="advisor-btn" id="advisor-btn" type="button">
+                <span class="advisor-btn-icon">🤖</span>
+                <span class="advisor-btn-text">Consult Gemini Farm Advisor</span>
+                <span class="advisor-btn-sub">Powered by Gemini AI</span>
+                <div class="btn-shimmer"></div>
+              </button>
+
+              <div class="advisor-panel" id="advisor-panel" hidden>
+                <div class="advisor-panel-header">
+                  <span class="advisor-panel-icon">🌾</span>
+                  <div>
+                    <h2 class="advisor-panel-title">Advisor Recommendations</h2>
+                    <p class="advisor-panel-sub">Gemini Large Language Model</p>
+                  </div>
+                </div>
+                <div class="advisor-advice" id="advisor-advice"></div>
+                <button class="advisor-retry-btn" id="advisor-retry-btn" type="button">↺ Re-consult</button>
+              </div>
+
+              <div class="advisor-loading" id="advisor-loading" hidden>
+                <div class="advisor-spinner"></div>
+                <p class="advisor-loading-text">Pinging Gemini advisor…</p>
+              </div>
+
+              <div class="advisor-error" id="advisor-error" hidden>
+                <span class="advisor-error-icon">⚠️</span>
+                <p class="advisor-error-msg" id="advisor-error-msg"></p>
+                <button class="reset-btn" id="advisor-error-retry" type="button">Retry</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── TAB 3: Crop Operations Planner ─────────────────────────────────── -->
+      <div class="tab-pane" id="tab-planner">
+        <!-- Planner Form -->
+        <div class="glass-card planner-form-card">
+          <div class="form-title-bar">
+            <span class="logo-icon">📅</span>
+            <h2>Operations Schedule Generator</h2>
+          </div>
+          
+          <form id="planner-form" novalidate>
+            <div class="planner-form-grid">
+              <div class="field-group">
+                <label for="planner-crop" class="field-label">Select Crop</label>
+                <select id="planner-crop" class="select-input" required>
+                  <option value="" disabled selected>-- Choose recommended crop --</option>
+                  <option value="wheat">Wheat 🌾</option>
+                  <option value="rice">Rice 🌾</option>
+                  <option value="cotton">Cotton 🌿</option>
+                  <option value="soybean">Soybean 🫘</option>
+                  <option value="maize">Maize 🌽</option>
+                  <option value="coffee">Coffee ☕</option>
+                  <option value="coconut">Coconut 🥥</option>
+                  <option value="apple">Apple 🍎</option>
+                  <option value="orange">Orange 🍊</option>
+                  <option value="banana">Banana 🍌</option>
+                  <option value="grapes">Grapes 🍇</option>
+                  <option value="mango">Mango 🥭</option>
+                  <option value="watermelon">Watermelon 🍉</option>
+                  <option value="muskmelon">Muskmelon 🍈</option>
+                  <option value="papaya">Papaya 🍈</option>
+                  <option value="pomegranate">Pomegranate 🍎</option>
+                  <option value="chickpea">Chickpea 🌱</option>
+                  <option value="pigeonpeas">Pigeonpeas 🌱</option>
+                  <option value="mungbean">Mungbean 🫘</option>
+                  <option value="blackgram">Blackgram 🫘</option>
+                  <option value="lentil">Lentil 🌿</option>
+                  <option value="jute">Jute 🌾</option>
+                </select>
+              </div>
+
+              <div class="field-group">
+                <label for="planner-date" class="field-label">Sowing Date</label>
+                <input type="date" id="planner-date" class="date-input" required />
+              </div>
+
+              <button type="submit" class="planner-btn" id="planner-generate-btn">Generate Plan</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Planner Output Card -->
+        <div class="glass-card" style="position: relative; min-height: 200px;">
+          <!-- Empty State -->
+          <div class="results-placeholder-card" id="planner-placeholder">
+            <span class="placeholder-icon">📅</span>
+            <h2 class="placeholder-title">Awaiting operations calendar</h2>
+            <p class="placeholder-desc">
+              Select a crop type and input a target sowing date above to generate a tailored agronomic timeline.
+            </p>
+          </div>
+
+          <!-- Loading -->
+          <div class="planner-loading-box" id="planner-loading" hidden>
+            <div class="planner-spinner"></div>
+            <p class="loading-text">Loading operations calendar database…</p>
+          </div>
+
+          <!-- Error -->
+          <div class="planner-error-box" id="planner-error" hidden>
+            <span class="error-icon">⚠️</span>
+            <p class="planner-error-msg" id="planner-error-msg"></p>
+          </div>
+
+          <!-- Results -->
+          <div class="planner-results-card" id="planner-results" hidden>
+            <div class="planner-result-header">
+              <div>
+                <h2 class="planner-result-title">📆 Agronomic Operational Timeline</h2>
+                <p class="planner-result-sub" id="planner-title-crop"></p>
+              </div>
+              <div class="planner-metadata">
+                <span id="planner-season">Season: Rabi</span>
+                <span id="planner-sowing-date">Sowing: --</span>
+                <span id="planner-harvest-date">Harvest: --</span>
+              </div>
+            </div>
+
+            <!-- Planting window status banner -->
+            <div class="planting-window-banner" id="planner-window-banner"></div>
+
+            <!-- Operational Chronological Timeline -->
+            <div class="timeline-container" id="planner-timeline"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── TAB 4: System Health Diagnostics ───────────────────────────────── -->
+      <div class="tab-pane" id="tab-health">
+        <div style="margin-bottom: 24px;">
+          <p class="welcome-desc">
+            AgriSense AI runs on a distributed microservice architecture. All microservices communicate locally via REST APIs. Review the diagnostics matrix below to verify active liveness probes.
+          </p>
+        </div>
+
+        <div class="diagnostics-grid">
+          <!-- Predict Service -->
+          <div class="glass-card diagnostic-card">
+            <div class="diagnostic-header">
+              <span class="diagnostic-name">Predict Service</span>
+              <span class="service-port">Port 8000</span>
+            </div>
+            <p class="service-desc">
+              Executes predictions using a Random Forest classifier. Reads pH, temperature, humidity, and rainfall.
+            </p>
+            <div class="diagnostic-footer">
+              <span class="diagnostic-status">
+                <span class="diagnostic-dot" id="health-predict-dot"></span>
+                <span id="health-predict-label">offline</span>
+              </span>
+              <span class="diagnostic-url">/predict</span>
+            </div>
+          </div>
+
+          <!-- Profit Service -->
+          <div class="glass-card diagnostic-card">
+            <div class="diagnostic-header">
+              <span class="diagnostic-name">Profit Calculator</span>
+              <span class="service-port">Port 8001</span>
+            </div>
+            <p class="service-desc">
+              Fetches wholesale crop prices from Agmarknet (2024-25 modal values) and calculates production costs.
+            </p>
+            <div class="diagnostic-footer">
+              <span class="diagnostic-status">
+                <span class="diagnostic-dot" id="health-profit-dot"></span>
+                <span id="health-profit-label">offline</span>
+              </span>
+              <span class="diagnostic-url">/profit</span>
+            </div>
+          </div>
+
+          <!-- Weather Service -->
+          <div class="glass-card diagnostic-card">
+            <div class="diagnostic-header">
+              <span class="diagnostic-name">Weather &amp; Geocoding</span>
+              <span class="service-port">Port 8002</span>
+            </div>
+            <p class="service-desc">
+              Pings Open-Meteo APIs to geocode location strings, fetch 14-day rainfall forecasts, and extract climate data.
+            </p>
+            <div class="diagnostic-footer">
+              <span class="diagnostic-status">
+                <span class="diagnostic-dot" id="health-weather-dot"></span>
+                <span id="health-weather-label">offline</span>
+              </span>
+              <span class="diagnostic-url">/weather/geocode</span>
+            </div>
+          </div>
+
+          <!-- Risk Assessment Service -->
+          <div class="glass-card diagnostic-card">
+            <div class="diagnostic-header">
+              <span class="diagnostic-name">Risk Assessment Engine</span>
+              <span class="service-port">Port 8003</span>
+            </div>
+            <p class="service-desc">
+              Processes climate variables against optimal thresholds to calculate crop soil, water, weather, and disease risk ratings.
+            </p>
+            <div class="diagnostic-footer">
+              <span class="diagnostic-status">
+                <span class="diagnostic-dot" id="health-risk-dot"></span>
+                <span id="health-risk-label">offline</span>
+              </span>
+              <span class="diagnostic-url">/risk</span>
+            </div>
+          </div>
+
+          <!-- Advisor Service -->
+          <div class="glass-card diagnostic-card">
+            <div class="diagnostic-header">
+              <span class="diagnostic-name">AI Gemini Advisor</span>
+              <span class="service-port">Port 8004</span>
+            </div>
+            <p class="service-desc">
+              Interfaces with Gemini 1.5 to provide natural language agronomic feedback, cost assessments, and crop schedules.
+            </p>
+            <div class="diagnostic-footer">
+              <span class="diagnostic-status">
+                <span class="diagnostic-dot" id="health-advisor-dot"></span>
+                <span id="health-advisor-label">offline</span>
+              </span>
+              <span class="diagnostic-url">/advise</span>
+            </div>
+          </div>
+
+          <!-- Planner Service -->
+          <div class="glass-card diagnostic-card">
+            <div class="diagnostic-header">
+              <span class="diagnostic-name">Crop operations Planner</span>
+              <span class="service-port">Port 8005</span>
+            </div>
+            <p class="service-desc">
+              Matches crops against optimal planting windows, reading crop lifecycle schedules from JSON metadata.
+            </p>
+            <div class="diagnostic-footer">
+              <span class="diagnostic-status">
+                <span class="diagnostic-dot" id="health-planner-dot"></span>
+                <span id="health-planner-label">offline</span>
+              </span>
+              <span class="diagnostic-url">/planner/schedule</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

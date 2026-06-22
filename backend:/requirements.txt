@@ -1,0 +1,21 @@
+# AgriSense-AI — Python Dependencies
+# Install with: pip install -r backend:/requirements.txt
+
+# ── Web framework ──────────────────────────────────────────────────────────────
+fastapi>=0.111.0
+uvicorn[standard]>=0.29.0
+
+# ── ML / data ─────────────────────────────────────────────────────────────────
+scikit-learn>=1.4.0
+joblib>=1.4.0
+numpy>=1.26.0
+pandas>=2.2.0
+
+# ── HTTP client (weather service) ─────────────────────────────────────────────
+requests>=2.31.0
+
+# ── Gemini AI (advisor service) ───────────────────────────────────────────────
+google-genai>=1.0.0
+
+# ── Environment variables ──────────────────────────────────────────────────────
+python-dotenv>=1.0.0

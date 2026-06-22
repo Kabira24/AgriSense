@@ -1,0 +1,108 @@
+{
+  "crop_id": "cotton",
+  "display_name": "Cotton",
+  "crop_type": "Fiber",
+  "season": "Kharif",
+  "total_duration_days": 165,
+  "stages": {
+    "sowing": {
+      "planting_window": "May 1 – June 15",
+      "method": "Dibbling or drilling",
+      "seed_rate": {
+        "value_range_kg_ha": [2.5, 3.5],
+        "notes": "Lower rate (2.5-3.5 kg/ha) is for Bt Cotton hybrids. Desi varieties require 12-15 kg/ha."
+      },
+      "sowing_depth_cm": {
+        "min": 3.0,
+        "max": 5.0
+      },
+      "row_spacing_cm": 90.0,
+      "plant_spacing_cm": 60.0,
+      "soil_conditions": "Well-drained deep loamy soil. Seed bed should be moist but not waterlogged."
+    },
+    "irrigation": [
+      {
+        "stage_name": "First Irrigation",
+        "days_after_sowing": 35,
+        "importance": "Moderate",
+        "water_depth_mm": 50,
+        "notes": "Delaying first irrigation to 30-40 days forces the plant roots to grow deeper."
+      },
+      {
+        "stage_name": "Square Formation",
+        "days_after_sowing": 55,
+        "importance": "Critical",
+        "water_depth_mm": 60,
+        "notes": "Flowering squares begin to appear. Moisture stress at this stage leads to heavy square shedding."
+      },
+      {
+        "stage_name": "Flowering Stage",
+        "days_after_sowing": 80,
+        "importance": "Critical",
+        "water_depth_mm": 70,
+        "notes": "Peak water demand stage. Adequate moisture ensures maximum boll setting."
+      },
+      {
+        "stage_name": "Boll Development",
+        "days_after_sowing": 110,
+        "importance": "Critical",
+        "water_depth_mm": 60,
+        "notes": "Ensures proper fiber length, strength, and weight of cotton bolls."
+      },
+      {
+        "stage_name": "Boll Bursting / Maturity",
+        "days_after_sowing": 140,
+        "importance": "Moderate",
+        "water_depth_mm": 0,
+        "notes": "Irrigation must be stopped to allow bolls to dry and burst open without catching rot or staining fiber."
+      }
+    ],
+    "fertilizer": [
+      {
+        "stage_name": "Basal Application",
+        "days_after_sowing": 0,
+        "nutrients_kg_ha": {
+          "N": 45,
+          "P": 75,
+          "K": 35
+        },
+        "method": "Band placement below the seed line",
+        "notes": "Apply entire dose of Phosphorus, 50% of Potassium, and 30% of Nitrogen at the time of sowing."
+      },
+      {
+        "stage_name": "First Top Dressing (Squaring)",
+        "days_after_sowing": 45,
+        "nutrients_kg_ha": {
+          "N": 52,
+          "P": 0,
+          "K": 40
+        },
+        "method": "Side dressing followed by hoeing and irrigation",
+        "notes": "Apply 35% Nitrogen and remaining 50% Potassium during square initiation (40-45 DAS)."
+      },
+      {
+        "stage_name": "Second Top Dressing (Flowering)",
+        "days_after_sowing": 75,
+        "nutrients_kg_ha": {
+          "N": 53,
+          "P": 0,
+          "K": 0
+        },
+        "method": "Side dressing followed by irrigation",
+        "notes": "Apply remaining 35% Nitrogen at flowering initiation (70-80 DAS) to prevent nitrogen depletion."
+      }
+    ],
+    "harvest": {
+      "harvest_window": "October 15 – December 31",
+      "days_after_sowing": 165,
+      "maturity_indicators": [
+        "Cotton bolls burst open naturally exposing dry white fluffy lint",
+        "Inner boll walls become brown and dry"
+      ],
+      "optimal_grain_moisture_pct": 8.0,
+      "expected_yield_range_t_ha": [1.5, 2.5],
+      "harvest_method": "Manual hand picking in 3 to 4 sequential rounds (pickings)",
+      "notes": "Pick clean cotton from fully burst bolls in morning hours (after dew dries) to maintain high fiber quality. Avoid leaf and trash contamination."
+    }
+  }
+}

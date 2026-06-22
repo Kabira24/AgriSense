@@ -1,0 +1,74 @@
+{
+  "crop_id": "soybean",
+  "display_name": "Soybean",
+  "crop_type": "Oilseed / Legume",
+  "season": "Kharif",
+  "total_duration_days": 105,
+  "stages": {
+    "sowing": {
+      "planting_window": "June 15 – July 15",
+      "method": "Line sowing using seed-drill",
+      "seed_rate": {
+        "value_range_kg_ha": [70, 80],
+        "notes": "Ensure seed viability. Treat seeds with Rhizobium culture before sowing to promote nodulation."
+      },
+      "sowing_depth_cm": {
+        "min": 2.5,
+        "max": 3.0
+      },
+      "row_spacing_cm": 45.0,
+      "plant_spacing_cm": 10.0,
+      "soil_conditions": "Well-drained soil with a fine seed bed. Soybean is very sensitive to deep planting and waterlogging."
+    },
+    "irrigation": [
+      {
+        "stage_name": "Emergence / Sprouting",
+        "days_after_sowing": 5,
+        "importance": "Moderate",
+        "water_depth_mm": 30,
+        "notes": "Moist soil is necessary for uniform germination. Avoid flooding to prevent crusting."
+      },
+      {
+        "stage_name": "Flowering Stage",
+        "days_after_sowing": 40,
+        "importance": "Critical",
+        "water_depth_mm": 50,
+        "notes": "Water stress at flowering reduces the number of flowers and pods per plant."
+      },
+      {
+        "stage_name": "Pod Filling Stage",
+        "days_after_sowing": 65,
+        "importance": "Critical",
+        "water_depth_mm": 50,
+        "notes": "Most critical stage for yield. Water deficiency leads to shriveled seeds and premature maturity."
+      }
+    ],
+    "fertilizer": [
+      {
+        "stage_name": "Basal Application",
+        "days_after_sowing": 0,
+        "nutrients_kg_ha": {
+          "N": 20,
+          "P": 60,
+          "K": 40,
+          "S": 20
+        },
+        "method": "Band placement below the seed at sowing",
+        "notes": "As a nitrogen-fixing legume, soybean needs only a starter dose of Nitrogen (20 kg/ha). Adequate Phosphorus and Sulfur (20 kg/ha) are critical for root/pod growth and oil synthesis."
+      }
+    ],
+    "harvest": {
+      "harvest_window": "September 15 – October 20",
+      "days_after_sowing": 105,
+      "maturity_indicators": [
+        "Leaves turn yellow, dry, and drop off",
+        "Pods turn brown or straw-colored and make a rattling sound when shaken",
+        "Moisture level in grain drops to 14-16%"
+      ],
+      "optimal_grain_moisture_pct": 13.0,
+      "expected_yield_range_t_ha": [1.5, 2.5],
+      "harvest_method": "Sickle manual cutting or mechanical combine harvester",
+      "notes": "Harvest promptly when mature to prevent pod shattering. Store at 10-12% moisture."
+    }
+  }
+}

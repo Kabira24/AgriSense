@@ -1,0 +1,116 @@
+{
+  "crop_id": "wheat",
+  "display_name": "Wheat",
+  "crop_type": "Cereal",
+  "season": "Rabi",
+  "total_duration_days": 130,
+  "stages": {
+    "sowing": {
+      "planting_window": "November 1 – December 15",
+      "method": "Drilling or seed-drill broadcasting",
+      "seed_rate": {
+        "value_range_kg_ha": [100, 125],
+        "notes": "Higher seed rate of 125 kg/ha is recommended for late sowing conditions."
+      },
+      "sowing_depth_cm": {
+        "min": 4.0,
+        "max": 5.0
+      },
+      "row_spacing_cm": 22.5,
+      "plant_spacing_cm": 5.0,
+      "soil_conditions": "Fine tilth soil with optimal moisture level to ensure uniform germination."
+    },
+    "irrigation": [
+      {
+        "stage_name": "Crown Root Initiation (CRI)",
+        "days_after_sowing": 21,
+        "importance": "Critical",
+        "water_depth_mm": 50,
+        "notes": "Most critical stage. Water shortage at this stage severely reduces tillering and yield."
+      },
+      {
+        "stage_name": "Tillering Stage",
+        "days_after_sowing": 45,
+        "importance": "Moderate",
+        "water_depth_mm": 50,
+        "notes": "Promotes development of productive tillers."
+      },
+      {
+        "stage_name": "Late Jointing Stage",
+        "days_after_sowing": 65,
+        "importance": "Moderate",
+        "water_depth_mm": 50,
+        "notes": "Supports rapid vegetative growth and stem elongation."
+      },
+      {
+        "stage_name": "Flowering / Heading Stage",
+        "days_after_sowing": 85,
+        "importance": "Critical",
+        "water_depth_mm": 60,
+        "notes": "Ensures proper pollination and prevents spikelet sterility."
+      },
+      {
+        "stage_name": "Milking Stage",
+        "days_after_sowing": 105,
+        "importance": "Critical",
+        "water_depth_mm": 50,
+        "notes": "Ensures grain size development and weight."
+      },
+      {
+        "stage_name": "Dough Stage",
+        "days_after_sowing": 120,
+        "importance": "Moderate",
+        "water_depth_mm": 40,
+        "notes": "Last light irrigation. Avoid high winds during irrigation to prevent lodging."
+      }
+    ],
+    "fertilizer": [
+      {
+        "stage_name": "Basal Application",
+        "days_after_sowing": 0,
+        "nutrients_kg_ha": {
+          "N": 60,
+          "P": 60,
+          "K": 40
+        },
+        "method": "Soil incorporation during final land preparation",
+        "notes": "Full dose of Phosphorus and Potassium, along with half the total Nitrogen."
+      },
+      {
+        "stage_name": "First Top Dressing (CRI)",
+        "days_after_sowing": 21,
+        "nutrients_kg_ha": {
+          "N": 30,
+          "P": 0,
+          "K": 0
+        },
+        "method": "Broadcasting followed by irrigation",
+        "notes": "One-fourth of total Nitrogen applied immediately before or after the first irrigation."
+      },
+      {
+        "stage_name": "Second Top Dressing (Late Jointing)",
+        "days_after_sowing": 45,
+        "nutrients_kg_ha": {
+          "N": 30,
+          "P": 0,
+          "K": 0
+        },
+        "method": "Broadcasting followed by irrigation",
+        "notes": "Remaining one-fourth of Nitrogen applied at the tillering/jointing transition."
+      }
+    ],
+    "harvest": {
+      "harvest_window": "March 15 – April 30",
+      "days_after_sowing": 130,
+      "maturity_indicators": [
+        "Straw and spikes turn golden yellow",
+        "Grains become hard and make a cracking sound when pressed between teeth",
+        "Moisture level in grain drops below 15%"
+      ],
+      "optimal_grain_moisture_pct": 12.0,
+      "expected_yield_range_t_ha": [3.5, 5.5],
+      "harvest_method": "Sickle manual harvesting or mechanical combine harvester",
+      "notes": "Store in dry place after sun drying to 12% moisture to prevent pest infestation."
+    }
+  }
+}

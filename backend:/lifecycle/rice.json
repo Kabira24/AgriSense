@@ -1,0 +1,101 @@
+{
+  "crop_id": "rice",
+  "display_name": "Rice",
+  "crop_type": "Cereal",
+  "season": "Kharif",
+  "total_duration_days": 135,
+  "stages": {
+    "sowing": {
+      "planting_window": "June 1 – July 15",
+      "method": "Transplanting from nursery (wet bed method)",
+      "seed_rate": {
+        "value_range_kg_ha": [35, 45],
+        "notes": "35-45 kg of seed is sufficient to raise nursery for transplanting one hectare of land."
+      },
+      "sowing_depth_cm": {
+        "min": 2.0,
+        "max": 3.0
+      },
+      "row_spacing_cm": 20.0,
+      "plant_spacing_cm": 15.0,
+      "soil_conditions": "Puddled clayey soils with standing water of 2-3 cm for transplanting seedlings (21-25 days old)."
+    },
+    "irrigation": [
+      {
+        "stage_name": "Transplanting to Active Tillering",
+        "days_after_sowing": 25,
+        "importance": "Critical",
+        "water_depth_mm": 30,
+        "notes": "Maintain shallow water depth of 2-3 cm to facilitate rooting and tillering."
+      },
+      {
+        "stage_name": "Panicle Initiation",
+        "days_after_sowing": 60,
+        "importance": "Critical",
+        "water_depth_mm": 50,
+        "notes": "Critical moisture stage. Water deficit here drastically increases spikelet sterility."
+      },
+      {
+        "stage_name": "Flowering / Heading Stage",
+        "days_after_sowing": 85,
+        "importance": "Critical",
+        "water_depth_mm": 50,
+        "notes": "Maintain standing water of 5 cm to ensure healthy flowering."
+      },
+      {
+        "stage_name": "Dough / Grain Filling Stage",
+        "days_after_sowing": 105,
+        "importance": "Moderate",
+        "water_depth_mm": 30,
+        "notes": "Keep soil moist. Drain water 10-15 days before harvest to facilitate uniform ripening and machine harvesting."
+      }
+    ],
+    "fertilizer": [
+      {
+        "stage_name": "Basal Application (Transplanting)",
+        "days_after_sowing": 25,
+        "nutrients_kg_ha": {
+          "N": 60,
+          "P": 60,
+          "K": 40
+        },
+        "method": "Incorporate in soil during final puddling",
+        "notes": "Apply 50% Nitrogen and 100% of Phosphorus and Potassium doses as basal."
+      },
+      {
+        "stage_name": "First Top Dressing (Tillering)",
+        "days_after_sowing": 50,
+        "nutrients_kg_ha": {
+          "N": 30,
+          "P": 0,
+          "K": 0
+        },
+        "method": "Broadcasting in standing water (drain slightly before application)",
+        "notes": "Apply 25% Nitrogen at active tillering stage (approx. 20-25 days after transplanting)."
+      },
+      {
+        "stage_name": "Second Top Dressing (Panicle Initiation)",
+        "days_after_sowing": 75,
+        "nutrients_kg_ha": {
+          "N": 30,
+          "P": 0,
+          "K": 0
+        },
+        "method": "Broadcasting in standing water",
+        "notes": "Apply the remaining 25% Nitrogen at panicle initiation (approx. 45-50 days after transplanting)."
+      }
+    ],
+    "harvest": {
+      "harvest_window": "October 1 – November 15",
+      "days_after_sowing": 135,
+      "maturity_indicators": [
+        "More than 80% grains in the panicle turn golden yellow/straw-colored",
+        "Grains are firm and hard to break when squeezed between thumb and index finger"
+      ],
+      "optimal_grain_moisture_pct": 18.0,
+      "expected_yield_range_t_ha": [3.5, 6.0],
+      "harvest_method": "Manual cutting with sickle or combine harvesting",
+      "notes": "Dry harvested paddy to 14% moisture before milling or storage to prevent grain breakage and mold."
+    }
+  }
+}
