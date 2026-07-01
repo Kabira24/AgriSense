@@ -23,13 +23,31 @@
 
 'use strict';
 
-const API_BASE     = 'http://localhost:8000';
-const PROFIT_BASE  = 'http://localhost:8001';
-const WEATHER_BASE = 'http://localhost:8002';
-const RISK_BASE    = 'http://localhost:8003';
-const ADVISOR_BASE = 'http://localhost:8004';
-const PLANNER_BASE = 'http://localhost:8005';
-const SENSOR_BASE  = 'http://localhost:8006';  // Live Sensor Feed (mock → IoT)
+// ── Backend URL Configuration ─────────────────────────────────────────────────
+// Single configurable URL replaces the previous 7 separate port constants.
+// To configure for production, set window.AGRISENSE_BACKEND_URL in index.html
+// (see the <script> block near the bottom of index.html).
+const BACKEND_URL = (() => {
+  // 1. Explicit override from index.html (production Render URL)
+  if (window.AGRISENSE_BACKEND_URL) return window.AGRISENSE_BACKEND_URL;
+  // 2. Local development fallback
+  if (window.location.hostname === 'localhost' ||
+      window.location.hostname === '127.0.0.1') {
+    return 'http://localhost:8000';
+  }
+  // 3. Same-origin fallback (e.g. if backend and frontend are co-hosted)
+  return window.location.origin;
+})();
+
+// All service bases now point to the same unified backend.
+// The variable names are preserved so no other line in this file needs to change.
+const API_BASE     = BACKEND_URL;
+const PROFIT_BASE  = BACKEND_URL;
+const WEATHER_BASE = BACKEND_URL;
+const RISK_BASE    = BACKEND_URL;
+const ADVISOR_BASE = BACKEND_URL;
+const PLANNER_BASE = BACKEND_URL;
+const SENSOR_BASE  = BACKEND_URL;
 
 // ── Sensor Mode State ────────────────────────────────────────────────────────
 // Tracks whether the form is in Manual or Live Sensor polling mode.

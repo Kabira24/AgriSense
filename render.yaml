@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: agrisense-backend
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: cd backend && uvicorn app:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false            # Set this in the Render dashboard — do NOT hardcode
+      - key: GEMINI_MODEL
+        value: gemini-2.0-flash
+      - key: CORS_ORIGINS
+        value: "*"             # Restrict to your Vercel domain after deployment
+                               # e.g., https://agrisense.vercel.app
+    healthCheckPath: /health

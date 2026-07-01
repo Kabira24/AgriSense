@@ -1,7 +1,7 @@
 """
 risk.py
 ───────
-FastAPI risk engine for AgriSense-AI.
+AgriSense-AI — Risk engine router.
 
 Computes four agronomic risk scores (0–100) plus a composite:
 
@@ -13,17 +13,12 @@ Computes four agronomic risk scores (0–100) plus a composite:
 Endpoints
   POST /risk              → full risk breakdown
   GET  /risk/crops        → list crops with their optimal parameters
-  GET  /health
-
-Usage
-  python backend:/risk.py
 """
 
 from __future__ import annotations
 
 from typing import Optional
-from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field, field_validator
 
 # ── Crop optimal parameters ───────────────────────────────────────────────────
@@ -226,27 +221,11 @@ def calculate_risk(req: RiskRequest) -> RiskResponse:
     )
 
 
-# ── FastAPI app ───────────────────────────────────────────────────────────────
-
-app = FastAPI(
-    title       = "AgriSense-AI Risk Engine",
-    description = "Computes Soil, Disease, Water, Weather and Composite risk scores (0–100).",
-    version     = "1.0.0",
-)
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"], allow_credentials=True,
-    allow_methods=["*"], allow_headers=["*"],
-)
+# ── APIRouter ─────────────────────────────────────────────────────────────────
+router = APIRouter()
 
 
-@app.get("/health", tags=["meta"])
-def health():
-    return {"status": "ok", "crops_with_optima": len(CROP_OPTIMA)}
-
-
-@app.get("/risk/crops", tags=["meta"])
+@router.get("/risk/crops", tags=["meta"])
 def list_crops():
     """List all crops and their optimal parameters."""
     return [
@@ -255,7 +234,7 @@ def list_crops():
     ]
 
 
-@app.post("/risk", response_model=RiskResponse, tags=["risk"])
+@router.post("/risk", response_model=RiskResponse, tags=["risk"])
 def assess_risk(req: RiskRequest):
     """
     Compute four agronomic risk scores and a weighted composite.
@@ -263,10 +242,3 @@ def assess_risk(req: RiskRequest):
     Falls back to default optima (pH 6.5, 25°C, 800 mm) for unknown crops.
     """
     return calculate_risk(req)
-
-
-# ── Entry point ───────────────────────────────────────────────────────────────
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run("risk:app", host="0.0.0.0", port=8003,
-                reload=False, log_level="info")

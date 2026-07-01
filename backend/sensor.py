@@ -1,7 +1,7 @@
 """
 sensor.py
 ─────────
-AgriSense-AI — Live Sensor Feed Service.
+AgriSense-AI — Live Sensor Feed router.
 
 Fetches the latest row from a Google Sheets CSV export every time
 GET /latest-sensor is called. Falls back to static mock values if the
@@ -10,7 +10,6 @@ sheet is unreachable or returns malformed data.
 Endpoints
   GET /latest-sensor   → Latest sensor reading (live or mock fallback)
   GET /sensor/status   → Integration status and last-fetch metadata
-  GET /health          → Liveness probe
 
 Data source
   Google Sheets CSV export (fetched live on every request):
@@ -18,8 +17,6 @@ Data source
 
   Expected column headers (case-insensitive, whitespace-trimmed):
     Timestamp | Temperature | Humidity | Soil Moisture | pH
-
-Port: 8006
 """
 
 from __future__ import annotations
@@ -31,8 +28,7 @@ import urllib.request
 from datetime import datetime, timezone
 from typing import Optional
 
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import APIRouter
 from pydantic import BaseModel
 
 log = logging.getLogger("sensor")
@@ -48,25 +44,8 @@ GOOGLE_SHEET_CSV_URL: str = (
 # Seconds to wait for Google Sheets HTTP response
 _FETCH_TIMEOUT = 8
 
-# ── FastAPI App ────────────────────────────────────────────────────────────────
-app = FastAPI(
-    title="AgriSense-AI Live Sensor Feed Service",
-    description=(
-        "Streams live soil and climate readings from a Google Sheets CSV export "
-        "to the AgriSense dashboard. Falls back to mock values if the sheet is "
-        "temporarily unavailable."
-    ),
-    version="2.0.0",
-)
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
+# ── APIRouter ──────────────────────────────────────────────────────────────────
+router = APIRouter()
 
 # ── Response schemas ───────────────────────────────────────────────────────────
 
@@ -190,19 +169,7 @@ def _fetch_from_google_sheet() -> SensorReading:
 
 # ── Endpoints ──────────────────────────────────────────────────────────────────
 
-@app.get("/health", tags=["meta"])
-def health():
-    """Liveness probe for the sensor service."""
-    return {
-        "status":             "ok",
-        "service":            "live-sensor-feed",
-        "data_source":        "google_sheets",
-        "google_sheet_url":   GOOGLE_SHEET_CSV_URL,
-        "integration_active": True,
-    }
-
-
-@app.get("/latest-sensor", response_model=SensorReading, tags=["sensor"])
+@router.get("/latest-sensor", response_model=SensorReading, tags=["sensor"])
 def get_latest_sensor() -> SensorReading:
     """
     Returns the most recent soil and climate sensor reading.
@@ -231,7 +198,7 @@ def get_latest_sensor() -> SensorReading:
         return _MOCK
 
 
-@app.get("/sensor/status", response_model=SensorStatus, tags=["sensor"])
+@router.get("/sensor/status", response_model=SensorStatus, tags=["sensor"])
 def sensor_status() -> SensorStatus:
     """
     Returns the current sensor integration status.
@@ -249,10 +216,3 @@ def sensor_status() -> SensorStatus:
             "is temporarily unavailable."
         ),
     )
-
-
-# ── Entry point ────────────────────────────────────────────────────────────────
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8006)

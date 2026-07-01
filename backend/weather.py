@@ -1,7 +1,7 @@
 """
 weather.py
 ──────────
-FastAPI weather service for AgriSense-AI.
+AgriSense-AI — Weather router.
 
 Data source : Open-Meteo (https://open-meteo.com) — free, no API key.
 Cache       : In-memory TTL cache, 1-hour expiry per (lat, lon) key.
@@ -10,13 +10,6 @@ Endpoints
   GET /weather?lat=&lon=&days=          → raw daily forecast (7–16 days)
   GET /weather/summary?lat=&lon=        → crop-ready averages (temp, rainfall)
   GET /weather/geocode?city=&country=   → city name → lat/lon
-  GET /health                           → liveness probe
-
-Crop-ready summary
-  temperature  – mean of daily (max+min)/2 over the forecast window (°C)
-  humidity     – mean relative humidity at 2 m (%)
-  rainfall     – annualised rainfall estimate from forecast window (mm/year)
-  These values are ready to pass directly into the /predict endpoint.
 """
 
 from __future__ import annotations
@@ -27,8 +20,7 @@ from datetime import datetime, timezone
 from typing import Optional
 
 import requests
-from fastapi import FastAPI, HTTPException, Query
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel, Field
 
 # ── Constants ─────────────────────────────────────────────────────────────────
@@ -227,34 +219,13 @@ class GeocodeResponse(BaseModel):
     timezone:  Optional[str]
 
 
-# ── FastAPI app ───────────────────────────────────────────────────────────────
-app = FastAPI(
-    title       = "AgriSense-AI Weather Service",
-    description = "Fetches temperature & rainfall forecasts via Open-Meteo. "
-                  "Responses cached for 1 hour.",
-    version     = "1.0.0",
-)
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"], allow_credentials=True,
-    allow_methods=["*"], allow_headers=["*"],
-)
+# ── APIRouter ─────────────────────────────────────────────────────────────────
+router = APIRouter()
 
 
 # ── Endpoints ─────────────────────────────────────────────────────────────────
 
-@app.get("/health", tags=["meta"])
-def health():
-    return {
-        "status":    "ok",
-        "provider":  "Open-Meteo",
-        "cache_ttl": f"{CACHE_TTL_SECONDS}s",
-        "cache":     _cache.stats(),
-    }
-
-
-@app.get("/weather/geocode", response_model=GeocodeResponse, tags=["geo"])
+@router.get("/weather/geocode", response_model=GeocodeResponse, tags=["geo"])
 def geocode(
     city:    str           = Query(..., description="City name, e.g. 'Pune'"),
     country: Optional[str] = Query(None, description="Country code, e.g. 'IN'"),
@@ -263,7 +234,7 @@ def geocode(
     return _fetch_geocode(city, country)
 
 
-@app.get("/weather", response_model=WeatherResponse, tags=["weather"])
+@router.get("/weather", response_model=WeatherResponse, tags=["weather"])
 def get_forecast(
     lat:  float = Query(..., ge=-90,  le=90,  description="Latitude"),
     lon:  float = Query(..., ge=-180, le=180, description="Longitude"),
@@ -311,7 +282,7 @@ def get_forecast(
     )
 
 
-@app.get("/weather/summary", response_model=CropWeatherSummary, tags=["weather"])
+@router.get("/weather/summary", response_model=CropWeatherSummary, tags=["weather"])
 def get_crop_summary(
     lat:  float = Query(..., ge=-90,  le=90,  description="Latitude"),
     lon:  float = Query(..., ge=-180, le=180, description="Longitude"),
@@ -365,16 +336,4 @@ def get_crop_summary(
         humidity             = _safe_mean(hum_means),
         rainfall             = annualised,
         rainfall_forecast_mm = total_rain_mm,
-    )
-
-
-# ── Entry point ───────────────────────────────────────────────────────────────
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(
-        "weather:app",
-        host      = "0.0.0.0",
-        port      = 8002,
-        reload    = False,
-        log_level = "info",
     )

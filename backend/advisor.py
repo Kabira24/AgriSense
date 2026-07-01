@@ -16,8 +16,6 @@ Behaviour
 Environment (optional)
   GEMINI_API_KEY   – Google AI Studio key (demo works without it)
   GEMINI_MODEL     – model name override (default: gemini-2.0-flash)
-
-Port: 8004
 """
 
 from __future__ import annotations
@@ -31,12 +29,11 @@ from typing import Optional
 # ── Load .env from the workspace root before reading env vars ─────────────────
 try:
     from dotenv import load_dotenv as _load_dotenv
-    _load_dotenv(Path(__file__).parent.parent / ".env")
+    _load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 except ImportError:
     pass   # python-dotenv not installed; env vars must be set in the shell
 
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import APIRouter
 from pydantic import BaseModel, Field
 
 # ── Optional Gemini import — never crash if the library is unavailable ─────────
@@ -48,7 +45,7 @@ except ImportError:
     _GENAI_AVAILABLE = False
 
 # ── Paths ──────────────────────────────────────────────────────────────────────
-_HERE = Path(__file__).parent   # backend:/
+_HERE = Path(__file__).resolve().parent   # backend/
 _SYSTEM_PROMPT_PATH = _HERE / "advisor_system_prompt.md"
 
 # ── Load system prompt (used by Gemini path; not required for fallback) ────────
@@ -71,24 +68,8 @@ if not _API_KEY:
         stacklevel=1,
     )
 
-# ── FastAPI app ────────────────────────────────────────────────────────────────
-app = FastAPI(
-    title="AgriSense-AI Farm Advisor",
-    description=(
-        "Produces farmer-friendly agronomic advice from crop recommendation, "
-        "profit estimate, weather, and risk data.  Gemini API is used when "
-        "available; a rich local engine provides full advice otherwise."
-    ),
-    version="2.0.0",
-)
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# ── APIRouter ──────────────────────────────────────────────────────────────────
+router = APIRouter()
 
 
 # ── Request / Response schemas ─────────────────────────────────────────────────
@@ -647,7 +628,7 @@ Your Top 3 Action Items Today:
 
 # ── Endpoint ───────────────────────────────────────────────────────────────────
 
-@app.post("/advise", response_model=AdviseResponse, tags=["advisor"])
+@router.post("/advise", response_model=AdviseResponse, tags=["advisor"])
 def advise(req: AdviseRequest) -> AdviseResponse:
     """
     Produce farmer-friendly agronomic advice from the four AgriSense inputs.
@@ -681,26 +662,13 @@ def advise(req: AdviseRequest) -> AdviseResponse:
 
 # ── Health & debug endpoints ───────────────────────────────────────────────────
 
-@app.get("/health", tags=["meta"])
-def health():
-    return {
-        "status":               "ok",
-        "gemini_model":         _MODEL_NAME,
-        "gemini_api_key_set":   bool(_API_KEY),
-        "gemini_lib_available": _GENAI_AVAILABLE,
-        "local_advisor":        "always_available",
-        "system_prompt_loaded": bool(SYSTEM_PROMPT),
-        "system_prompt_chars":  len(SYSTEM_PROMPT),
-    }
-
-
-@app.get("/advise/prompt", tags=["meta"])
+@router.get("/advise/prompt", tags=["meta"])
 def get_system_prompt():
     """Return the active system prompt (useful for debugging/inspection)."""
     return {"system_prompt": SYSTEM_PROMPT, "chars": len(SYSTEM_PROMPT)}
 
 
-@app.get("/advise/example-input", tags=["meta"])
+@router.get("/advise/example-input", tags=["meta"])
 def example_input():
     """Return a fully-formed example request body for POST /advise."""
     return {
@@ -740,15 +708,3 @@ def example_input():
             "risk_level":     "Low",
         },
     }
-
-
-# ── Entry point ────────────────────────────────────────────────────────────────
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(
-        "advisor:app",
-        host="0.0.0.0",
-        port=8004,
-        reload=True,
-        log_level="info",
-    )

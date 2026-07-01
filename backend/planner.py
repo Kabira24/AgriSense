@@ -1,7 +1,7 @@
 """
 planner.py
 ──────────
-FastAPI crop planner service for AgriSense-AI.
+AgriSense-AI — Crop lifecycle planner router.
 
 Calculates a calendar of operations (sowing, irrigation, fertilizing, harvest)
 given a crop name and sowing date, using the crop's lifecycle JSON.
@@ -9,12 +9,6 @@ given a crop name and sowing date, using the crop's lifecycle JSON.
 Endpoints
   POST /planner/schedule  → returns full operational calendar with dates
   GET  /planner/crops     → returns list of supported crops
-  GET  /health            → liveness probe
-
-Usage
-  python backend:/planner.py
-  # or
-  uvicorn backend:.planner:app --reload --port 8005
 """
 
 from __future__ import annotations
@@ -23,14 +17,13 @@ import json
 from datetime import date, timedelta
 from pathlib import Path
 from typing import List, Dict, Any
-from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field, field_validator
 
 # ── Paths ─────────────────────────────────────────────────────────────────────
-_HERE = Path(__file__).resolve().parent          # backend:/
-_WORKSPACE = _HERE.parent              # AgriSense-AI:/
-_LIFECYCLE_DIR = _HERE / "lifecycle"   # backend:/lifecycle/
+_HERE = Path(__file__).resolve().parent          # backend/
+_WORKSPACE = _HERE.parent                        # AgriSense/
+_LIFECYCLE_DIR = _HERE / "lifecycle"             # backend/lifecycle/
 
 # ── Load and verify supported crops at startup ────────────────────────────────
 _SUPPORTED_CROPS: List[str] = []
@@ -45,7 +38,7 @@ print("=" * 60, flush=True)
 
 # ── Crop optimal month ranges (for India-centric conditions) ──────────────────
 # maps crop_id -> set of optimal months (1-12)
-_OPTIMAL_MONTHS: Dict[str, set[int]] = {
+_OPTIMAL_MONTHS: Dict[str, set] = {
     "wheat": {11, 12},     # November – December
     "rice": {6, 7},        # June – July
     "cotton": {5, 6},      # May – June
@@ -72,20 +65,8 @@ _OPTIMAL_MONTHS: Dict[str, set[int]] = {
     "watermelon": {1, 2, 3} # January – March
 }
 
-# ── FastAPI App ───────────────────────────────────────────────────────────────
-app = FastAPI(
-    title="AgriSense-AI Crop Planner Service",
-    description="Calculates tailored operations schedules and sowing window validation using lifecycle data.",
-    version="1.0.0",
-)
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# ── APIRouter ─────────────────────────────────────────────────────────────────
+router = APIRouter()
 
 # ── Schemas ───────────────────────────────────────────────────────────────────
 
@@ -149,24 +130,19 @@ def validate_planting_window(crop_id: str, sowing: date, window_text: str) -> tu
 
 # ── Endpoints ─────────────────────────────────────────────────────────────────
 
-@app.get("/health", tags=["meta"])
-def health():
-    return {"status": "ok", "service": "crop-planner"}
-
-
-@app.get("/planner/crops", tags=["planner"])
+@router.get("/planner/crops", tags=["planner"])
 def get_supported_crops():
     """Returns a list of crops that have lifecycle data files available."""
     if not _LIFECYCLE_DIR.exists():
         return {"crops": []}
-    
+
     crops = []
     for path in _LIFECYCLE_DIR.glob("*.json"):
         crops.append(path.stem)
     return {"crops": sorted(crops)}
 
 
-@app.post("/planner/schedule", response_model=ScheduleResponse, tags=["planner"])
+@router.post("/planner/schedule", response_model=ScheduleResponse, tags=["planner"])
 def generate_schedule(req: ScheduleRequest):
     json_path = _LIFECYCLE_DIR / f"{req.crop}.json"
     if not json_path.exists():
@@ -190,7 +166,7 @@ def generate_schedule(req: ScheduleRequest):
     fertilizer_info = stages.get("fertilizer", [])
     harvest_info = stages.get("harvest", {})
 
-    # 1.Sowing Window status validation
+    # 1. Sowing Window status validation
     window_text = sowing_info.get("planting_window", "N/A")
     window_status, window_msg = validate_planting_window(req.crop, req.sowing_date, window_text)
 
@@ -253,7 +229,7 @@ def generate_schedule(req: ScheduleRequest):
         if "S" in nutrients:
             fert_desc += f", S={nutrients.get('S')}"
         fert_desc += f". {fert.get('notes', '')}"
-        
+
         schedule.append(
             ScheduleEvent(
                 event_type="fertilizer",
@@ -307,9 +283,3 @@ def generate_schedule(req: ScheduleRequest):
         window_message=window_msg,
         schedule=schedule
     )
-
-
-if __name__ == "__main__":
-    import uvicorn
-    # Start server on port 8005 (8004 is reserved for advisor.py)
-    uvicorn.run(app, host="0.0.0.0", port=8005)

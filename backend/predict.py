@@ -1,12 +1,14 @@
 """
 predict.py
 ──────────
-FastAPI crop recommendation service for AgriSense-AI.
+AgriSense-AI — Crop recommendation router.
+
+All routes are registered on `router` (APIRouter) and included by app.py.
 
 Routes
 ──────
   Meta
-    GET  /health               Liveness probe
+    GET  /health               Liveness probe  (handled by app.py)
     GET  /model/info           Pipeline metadata (type, steps, features, classes)
 
   Crops catalogue
@@ -20,14 +22,6 @@ Routes
     POST /predict              Top-N crops for one soil/weather sample
     POST /predict/batch        Top-N crops for multiple samples in one call
     POST /predict/compare      Side-by-side confidence comparison for chosen crops
-
-  Frontend (static)
-    GET  /                     Serves frontend/index.html
-    GET  /static/**            Static file mount
-
-Usage
-  python backend:/predict.py
-  uvicorn backend:.predict:app --reload --port 8000
 """
 
 from __future__ import annotations
@@ -39,15 +33,12 @@ from typing import List, Optional
 
 import joblib
 import numpy as np
-from fastapi import FastAPI, HTTPException, Path as FPath, Query
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
-from fastapi.staticfiles import StaticFiles
+from fastapi import APIRouter, HTTPException, Path as FPath, Query
 from pydantic import BaseModel, Field, field_validator, model_validator
 
 # ── Paths ──────────────────────────────────────────────────────────────────────
-_HERE      = Path(__file__).parent    # backend:/
-_WORKSPACE = _HERE.parent             # AgriSense-AI:/
+_HERE      = Path(__file__).resolve().parent    # backend/
+_WORKSPACE = _HERE.parent                       # AgriSense/
 
 
 def _resolve(base: Path, *candidates: str) -> Path:
@@ -58,10 +49,9 @@ def _resolve(base: Path, *candidates: str) -> Path:
     raise FileNotFoundError(f"None of {candidates} found under {base}")
 
 
-MODELS_DIR   = _resolve(_WORKSPACE, "models:", "models")
+MODELS_DIR   = _resolve(_WORKSPACE, "models", "models:")
 MODEL_PATH   = MODELS_DIR / "crop_recommender.joblib"
 CLASSES_PATH = MODELS_DIR / "crop_recommender_classes.json"
-FRONTEND_DIR = _resolve(_WORKSPACE, "frontend:", "frontend")
 
 # ── Load model once at startup ────────────────────────────────────────────────
 _pipeline = joblib.load(MODEL_PATH)
@@ -71,6 +61,8 @@ with open(CLASSES_PATH) as _f:
 _CLASSES:  dict[str, str] = _meta["classes"]    # "0" → "apple", …
 _FEATURES: list[str]      = _meta["features"]   # ["ph", "temperature", …]
 _CROP_LIST: list[str]     = [_CLASSES[str(i)] for i in range(len(_CLASSES))]
+
+_VERSION = "2.0.0"
 
 # ── Static crop catalogue ─────────────────────────────────────────────────────
 # ph_opt, temp_opt(°C), humidity_opt(%), rainfall_opt(mm/yr), season, zone
@@ -123,24 +115,8 @@ _FEATURE_META: list[dict] = [
     },
 ]
 
-# ── FastAPI app ────────────────────────────────────────────────────────────────
-app = FastAPI(
-    title       = "AgriSense-AI Crop Recommendation Service",
-    description = (
-        "ML-powered crop recommendation engine.\n\n"
-        "**Model**: RandomForest classifier inside a sklearn Pipeline (StandardScaler → RF).\n"
-        "**Crops**: 22 · **Features**: 4 (ph, temperature, humidity, rainfall)\n\n"
-        "Use `POST /predict` for a single recommendation or `POST /predict/batch` "
-        "for multiple samples in one call."
-    ),
-    version     = "2.0.0",
-)
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"], allow_credentials=True,
-    allow_methods=["*"], allow_headers=["*"],
-)
+# ── APIRouter ──────────────────────────────────────────────────────────────────
+router = APIRouter()
 
 # ── Shared schemas ─────────────────────────────────────────────────────────────
 
@@ -196,23 +172,7 @@ def _infer(features: list[list[float]], top_n: int) -> list[list[CropPrediction]
 # META ROUTES
 # ═══════════════════════════════════════════════════════════════════════════════
 
-@app.get(
-    "/health",
-    tags=["meta"],
-    summary="Liveness probe",
-)
-def health():
-    """Returns service status, model file name, and number of crop classes."""
-    return {
-        "status":  "ok",
-        "model":   MODEL_PATH.name,
-        "version": app.version,
-        "classes": len(_CLASSES),
-        "features": len(_FEATURES),
-    }
-
-
-@app.get(
+@router.get(
     "/model/info",
     tags=["meta"],
     summary="Pipeline metadata",
@@ -259,7 +219,7 @@ class CropDetail(BaseModel):
     zone:         str   = Field(..., description="Agro-climatic zone")
 
 
-@app.get(
+@router.get(
     "/crops",
     response_model=List[CropDetail],
     tags=["crops"],
@@ -285,7 +245,7 @@ def list_crops(
     return crops
 
 
-@app.get(
+@router.get(
     "/crops/{crop}",
     response_model=CropDetail,
     tags=["crops"],
@@ -311,7 +271,7 @@ def get_crop(
 # FEATURES ROUTE
 # ═══════════════════════════════════════════════════════════════════════════════
 
-@app.get(
+@router.get(
     "/features",
     tags=["meta"],
     summary="Describe all input features",
@@ -341,7 +301,7 @@ class PredictResponse(BaseModel):
     input_echo: dict
 
 
-@app.post(
+@router.post(
     "/predict",
     response_model=PredictResponse,
     tags=["prediction"],
@@ -394,7 +354,7 @@ class BatchResponse(BaseModel):
     count:   int
 
 
-@app.post(
+@router.post(
     "/predict/batch",
     response_model=BatchResponse,
     tags=["prediction"],
@@ -445,7 +405,7 @@ class CompareResponse(BaseModel):
     input_echo:   dict
 
 
-@app.post(
+@router.post(
     "/predict/compare",
     response_model=CompareResponse,
     tags=["prediction"],
@@ -498,35 +458,4 @@ def predict_compare(req: CompareRequest):
         comparison   = comparison,
         best_overall = comparison[0].crop,
         input_echo   = req.model_dump(exclude={"crops"}),
-    )
-
-
-# ═══════════════════════════════════════════════════════════════════════════════
-# FRONTEND STATIC FILES
-# ═══════════════════════════════════════════════════════════════════════════════
-
-if FRONTEND_DIR.exists():
-    app.mount(
-        "/static",
-        StaticFiles(directory=str(FRONTEND_DIR), html=True),
-        name="static",
-    )
-
-    @app.get("/", include_in_schema=False)
-    def serve_index():
-        index = FRONTEND_DIR / "index.html"
-        if index.exists():
-            return FileResponse(str(index))
-        return {"message": "Frontend not found – place index.html in frontend:/"}
-
-
-# ── Entry point ────────────────────────────────────────────────────────────────
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(
-        "predict:app",
-        host      = "0.0.0.0",
-        port      = 8000,
-        reload    = True,
-        log_level = "info",
     )

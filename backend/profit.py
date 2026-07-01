@@ -1,45 +1,42 @@
 """
 profit.py
 ─────────
-FastAPI profit estimation service for AgriSense-AI.
+AgriSense-AI — Profit estimation router.
+
+All routes are registered on `router` (APIRouter) and included by app.py.
 
 Routes
 ──────
   Meta
-    GET  /health                Liveness probe
-    GET  /commodities           All Agmarknet commodities in the price index
-    GET  /commodities/{name}    Prices for one commodity across all states
+    GET  /states                    States available in the Agmarknet price dataset
+    GET  /commodities               All Agmarknet commodities in the price index
+    GET  /commodities/{name}        Prices for one commodity across all states
 
   Crops catalogue
-    GET  /crops                 All crops with cost, commodity, price-availability
-    GET  /crops/{crop}          Single crop cost + live price card
-    GET  /states                States available in the Agmarknet price dataset
+    GET  /profit/crops              All crops with cost, commodity, price-availability
+    GET  /profit/crops/{crop}       Single crop cost + live price card
 
   Profit estimation
-    POST /profit                Full profit estimate for one crop/field
-    POST /profit/batch          Profit estimates for multiple crop/field combos
-    POST /profit/compare        Side-by-side profit comparison for several crops
-    POST /profit/breakeven      Break-even price only (lightweight, no revenue)
+    POST /profit                    Full profit estimate for one crop/field
+    POST /profit/batch              Profit estimates for multiple crop/field combos
+    POST /profit/compare            Side-by-side profit comparison for several crops
+    POST /profit/breakeven          Break-even price only (lightweight, no revenue)
 
-Usage
-  python backend:/profit.py
-  uvicorn backend:.profit:app --reload --port 8001
+Note: /crops and /crops/{crop} are prefixed as /profit/crops to avoid
+      conflict with predict.py's identical route paths.
 """
 
 from __future__ import annotations
 
-import sys
 from pathlib import Path
 from typing import Optional
 
-from fastapi import FastAPI, HTTPException, Path as FPath, Query
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import APIRouter, HTTPException, Path as FPath, Query
 from pydantic import BaseModel, Field, field_validator
 
 # ── Path bootstrap ─────────────────────────────────────────────────────────────
-_BACKEND   = Path(__file__).parent
+_BACKEND   = Path(__file__).resolve().parent
 _WORKSPACE = _BACKEND.parent
-sys.path.insert(0, str(_BACKEND))
 
 from profit_data import CROP_TO_COMMODITY, COST_PER_HECTARE
 from price_index  import PriceIndex
@@ -53,7 +50,7 @@ def _resolve(base: Path, *candidates: str) -> Path:
     raise FileNotFoundError(f"None of {candidates} found under {base}")
 
 
-_DS_DIR   = _resolve(_WORKSPACE, "datasets:", "datasets")
+_DS_DIR   = _resolve(_WORKSPACE, "datasets", "datasets:")
 _CSV_PATH = (
     _DS_DIR
     / "agmarknet-india-commodity-prices-2024-2025"
@@ -71,25 +68,10 @@ print(
 
 TONNES_TO_QUINTALS = 10  # 1 tonne = 10 quintals
 
-# ── FastAPI app ────────────────────────────────────────────────────────────────
-app = FastAPI(
-    title="AgriSense-AI Profit Estimation Service",
-    description=(
-        "Estimates crop revenue, cultivation cost, and net profit "
-        "using Agmarknet 2024-25 price data (CACP Cost-A2+FL basis).\n\n"
-        "**Price coverage**: 7 of 22 crops have live Agmarknet prices. "
-        "All 22 crops have cultivation cost estimates.\n\n"
-        "Use `POST /profit/compare` to rank multiple crops by profitability "
-        "for your field and state."
-    ),
-    version="2.0.0",
-)
+_VERSION = "2.0.0"
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"], allow_credentials=True,
-    allow_methods=["*"], allow_headers=["*"],
-)
+# ── APIRouter ──────────────────────────────────────────────────────────────────
+router = APIRouter()
 
 
 # ── Shared helpers ─────────────────────────────────────────────────────────────
@@ -226,27 +208,7 @@ class ProfitRequest(BaseModel):
 # META ROUTES
 # ═══════════════════════════════════════════════════════════════════════════════
 
-@app.get(
-    "/health",
-    tags=["meta"],
-    summary="Liveness probe",
-)
-def health():
-    """Returns service status and price index coverage statistics."""
-    with_price = sum(1 for v in CROP_TO_COMMODITY.values() if v is not None)
-    return {
-        "status":              "ok",
-        "version":             app.version,
-        "commodities_indexed": len(_PRICE_IDX.commodities),
-        "states_indexed":      len(_PRICE_IDX.states),
-        "crops_supported":     len(COST_PER_HECTARE),
-        "crops_with_prices":   with_price,
-        "price_source":        "Agmarknet 2024-25",
-        "cost_source":         "CACP Cost-A2+FL 2023-24",
-    }
-
-
-@app.get(
+@router.get(
     "/states",
     tags=["meta"],
     summary="List states in the price dataset",
@@ -260,7 +222,7 @@ def list_states():
 # COMMODITIES ROUTES
 # ═══════════════════════════════════════════════════════════════════════════════
 
-@app.get(
+@router.get(
     "/commodities",
     tags=["commodities"],
     summary="List all Agmarknet commodities in the price index",
@@ -285,7 +247,7 @@ def list_commodities():
     return {"commodities": result, "count": len(result)}
 
 
-@app.get(
+@router.get(
     "/commodities/{commodity_name}",
     tags=["commodities"],
     summary="Prices for one commodity across all states",
@@ -325,6 +287,7 @@ def get_commodity(
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # CROPS CATALOGUE ROUTES
+# (prefixed /profit/crops to avoid conflict with predict.py's /crops routes)
 # ═══════════════════════════════════════════════════════════════════════════════
 
 class CropCostCard(BaseModel):
@@ -335,13 +298,13 @@ class CropCostCard(BaseModel):
     national_modal:    Optional[float] = Field(None, description="National median price (Rs./quintal)")
 
 
-@app.get(
-    "/crops",
+@router.get(
+    "/profit/crops",
     response_model=list[CropCostCard],
     tags=["crops"],
     summary="All crops with cost and price-availability",
 )
-def list_crops(
+def list_profit_crops(
     price_available: Optional[bool] = Query(
         None, description="Filter: true = only crops with live prices"
     ),
@@ -371,13 +334,13 @@ def list_crops(
     return cards
 
 
-@app.get(
-    "/crops/{crop}",
+@router.get(
+    "/profit/crops/{crop}",
     response_model=CropCostCard,
     tags=["crops"],
     summary="Cost and price card for one crop",
 )
-def get_crop(
+def get_profit_crop(
     crop:  str           = FPath(..., description="Crop name (e.g. rice, maize)"),
     state: Optional[str] = Query(None, description="Indian state for localised price"),
 ):
@@ -406,7 +369,7 @@ def get_crop(
 # PROFIT ESTIMATION ROUTES
 # ═══════════════════════════════════════════════════════════════════════════════
 
-@app.post(
+@router.post(
     "/profit",
     response_model=ProfitResult,
     tags=["profit"],
@@ -465,7 +428,7 @@ class BatchProfitResponse(BaseModel):
     errors:  int
 
 
-@app.post(
+@router.post(
     "/profit/batch",
     response_model=BatchProfitResponse,
     tags=["profit"],
@@ -544,7 +507,7 @@ class CompareResponse(BaseModel):
     state:         Optional[str]
 
 
-@app.post(
+@router.post(
     "/profit/compare",
     response_model=CompareResponse,
     tags=["profit"],
@@ -635,7 +598,7 @@ class BreakevenResponse(BaseModel):
     margin_at_modal:   Optional[float] = Field(None, description="Profit if sold at national modal (Rs.)")
 
 
-@app.post(
+@router.post(
     "/profit/breakeven",
     response_model=BreakevenResponse,
     tags=["profit"],
@@ -682,16 +645,4 @@ def breakeven(req: BreakevenRequest):
         break_even_price    = break_even,
         national_modal      = national_modal,
         margin_at_modal     = margin,
-    )
-
-
-# ── Entry point ────────────────────────────────────────────────────────────────
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(
-        "profit:app",
-        host      = "0.0.0.0",
-        port      = 8001,
-        reload    = False,
-        log_level = "info",
     )
