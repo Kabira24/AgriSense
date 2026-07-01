@@ -1,0 +1,65 @@
+{
+  "crop_id": "lentil",
+  "display_name": "Lentil",
+  "crop_type": "Pulse",
+  "season": "Rabi",
+  "total_duration_days": 120,
+  "stages": {
+    "sowing": {
+      "planting_window": "October 15 – November 15",
+      "method": "Line Sowing or Drilling",
+      "seed_rate": {
+        "value_range_kg_ha": [30, 40],
+        "notes": "Use 30-40 kg/ha for small-seeded varieties; 45-50 kg/ha for bold-seeded."
+      },
+      "sowing_depth_cm": {
+        "min": 3.0,
+        "max": 4.0
+      },
+      "row_spacing_cm": 22.5,
+      "plant_spacing_cm": 5.0,
+      "soil_conditions": "Well-drained light loams and alluvial soils with pH 6.0-7.5."
+    },
+    "irrigation": [
+      {
+        "stage_name": "Vegetative Flower Bud Stage",
+        "days_after_sowing": 40,
+        "importance": "Moderate",
+        "water_depth_mm": 20,
+        "notes": "First irrigation if winter rains fail. Avoid water excess."
+      },
+      {
+        "stage_name": "Pod Formation Phase",
+        "days_after_sowing": 85,
+        "importance": "Critical",
+        "water_depth_mm": 25,
+        "notes": "Critical moisture requirement. Insufficient water reduces pods number."
+      }
+    ],
+    "fertilizer": [
+      {
+        "stage_name": "Basal Dressing",
+        "days_after_sowing": 0,
+        "nutrients_kg_ha": {
+          "N": 20,
+          "P": 40,
+          "K": 20
+        },
+        "method": "Band placement under seeds",
+        "notes": "Inoculate seeds with Rhizobium leguminosarum and mycorrhiza before sowing."
+      }
+    ],
+    "harvest": {
+      "harvest_window": "February 15 – March 15",
+      "days_after_sowing": 120,
+      "maturity_indicators": [
+        "Pods turn light golden-brown and dry up",
+        "Top pods are dry and seed rattles inside"
+      ],
+      "optimal_grain_moisture_pct": 14.0,
+      "expected_yield_range_t_ha": [1.0, 1.5],
+      "harvest_method": "Cutting plants manually close to soil with sickles",
+      "notes": "Heap harvested crop on threshing floors for 4-5 days of sun drying before threshing."
+    }
+  }
+}

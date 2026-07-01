@@ -15,6 +15,7 @@ Services & ports
     8003 – risk.py      Risk assessment engine
     8004 – advisor.py   Gemini AI farm advisor
     8005 – planner.py   Crop lifecycle planner
+    8006 – sensor.py    Live sensor feed (mock / IoT placeholder)
 
 Press Ctrl+C to stop all services.
 """
@@ -55,6 +56,7 @@ SERVICES: list[tuple[str, str, int]] = [
     ("risk",     "app", 8003),
     ("advisor",  "app", 8004),
     ("planner",  "app", 8005),
+    ("sensor",   "app", 8006),   # Live sensor feed — mock data; replace with IoT source in sensor.py
 ]
 
 # ── Launcher ───────────────────────────────────────────────────────────────────

@@ -28,9 +28,20 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field, field_validator
 
 # ── Paths ─────────────────────────────────────────────────────────────────────
-_HERE = Path(__file__).parent          # backend:/
+_HERE = Path(__file__).resolve().parent          # backend:/
 _WORKSPACE = _HERE.parent              # AgriSense-AI:/
 _LIFECYCLE_DIR = _HERE / "lifecycle"   # backend:/lifecycle/
+
+# ── Load and verify supported crops at startup ────────────────────────────────
+_SUPPORTED_CROPS: List[str] = []
+if _LIFECYCLE_DIR.exists():
+    _SUPPORTED_CROPS = sorted([p.stem for p in _LIFECYCLE_DIR.glob("*.json")])
+
+print("=" * 60, flush=True)
+print("  AgriSense-AI Crop Planner Service - Startup", flush=True)
+print(f"  Lifecycle directory: {_LIFECYCLE_DIR}", flush=True)
+print(f"  Discovered {len(_SUPPORTED_CROPS)} crops: {', '.join(_SUPPORTED_CROPS)}", flush=True)
+print("=" * 60, flush=True)
 
 # ── Crop optimal month ranges (for India-centric conditions) ──────────────────
 # maps crop_id -> set of optimal months (1-12)
@@ -39,6 +50,26 @@ _OPTIMAL_MONTHS: Dict[str, set[int]] = {
     "rice": {6, 7},        # June – July
     "cotton": {5, 6},      # May – June
     "soybean": {6, 7},     # June – July
+    "apple": {12, 1},      # December – January
+    "banana": {6, 7, 9, 10}, # June, July, September, October
+    "blackgram": {6, 7, 10}, # June, July, October
+    "chickpea": {10, 11},  # October – November
+    "coconut": {6, 7, 8, 9}, # June – September
+    "coffee": {6, 7, 8},   # June – August
+    "grapes": {10, 11},    # October – November
+    "jute": {3, 4, 5},     # March – May
+    "kidneybeans": {10, 11}, # October – November
+    "lentil": {10, 11},    # October – November
+    "maize": {6, 7, 10, 11}, # June, July, October, November
+    "mango": {7, 8},       # July – August
+    "mothbeans": {6, 7},   # June – July
+    "mungbean": {3, 4, 6, 7}, # March, April, June, July
+    "muskmelon": {2, 3},   # February – March
+    "orange": {6, 7, 8},   # June – August
+    "papaya": {6, 7, 2, 3}, # June, July, February, March
+    "pigeonpeas": {6, 7},  # June – July
+    "pomegranate": {6, 7, 1, 2}, # June, July, January, February
+    "watermelon": {1, 2, 3} # January – March
 }
 
 # ── FastAPI App ───────────────────────────────────────────────────────────────

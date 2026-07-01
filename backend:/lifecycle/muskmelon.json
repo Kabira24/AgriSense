@@ -1,0 +1,83 @@
+{
+  "crop_id": "muskmelon",
+  "display_name": "Muskmelon",
+  "crop_type": "Fruit",
+  "season": "Zaid",
+  "total_duration_days": 90,
+  "stages": {
+    "sowing": {
+      "planting_window": "February 1 – March 15",
+      "method": "Dibbling on raised beds or furrows",
+      "seed_rate": {
+        "value_range_kg_ha": [1, 2],
+        "notes": "1.5-2.0 kg/ha of high-quality hybrid seeds is sufficient."
+      },
+      "sowing_depth_cm": {
+        "min": 1.5,
+        "max": 2.5
+      },
+      "row_spacing_cm": 200.0,
+      "plant_spacing_cm": 60.0,
+      "soil_conditions": "Sandy loam riverbeds or well-drained loams with pH 6.0-7.0."
+    },
+    "irrigation": [
+      {
+        "stage_name": "Vine Elongation / Flowering",
+        "days_after_sowing": 30,
+        "importance": "Critical",
+        "water_depth_mm": 20,
+        "notes": "Ensure moderate moisture. Avoid wet foliage to prevent mildew."
+      },
+      {
+        "stage_name": "Fruit Set & Development",
+        "days_after_sowing": 55,
+        "importance": "Critical",
+        "water_depth_mm": 25,
+        "notes": "Ensure regular water supply to avoid growth checks and misshapen fruit."
+      },
+      {
+        "stage_name": "Fruit Ripening Phase",
+        "days_after_sowing": 80,
+        "importance": "Moderate",
+        "water_depth_mm": 10,
+        "notes": "Reduce or stop irrigation. Too much water at ripening reduces sugars and causes fruits to split."
+      }
+    ],
+    "fertilizer": [
+      {
+        "stage_name": "Basal Dressing",
+        "days_after_sowing": 0,
+        "nutrients_kg_ha": {
+          "N": 40,
+          "P": 60,
+          "K": 60
+        },
+        "method": "Soil incorporate during furrow layout preparation",
+        "notes": "Apply NPK along with compost/vermicompost."
+      },
+      {
+        "stage_name": "Vine Extension Top Dressing",
+        "days_after_sowing": 35,
+        "nutrients_kg_ha": {
+          "N": 40,
+          "P": 0,
+          "K": 20
+        },
+        "method": "Side dressing along the hills or drip fertigation",
+        "notes": "Apply nitrogen to promote fast leaf shoot extension."
+      }
+    ],
+    "harvest": {
+      "harvest_window": "May 1 – May 30",
+      "days_after_sowing": 90,
+      "maturity_indicators": [
+        "Half-slip or full-slip stage (fruit detaches easily from vine with slight pressure)",
+        "Skin color turns yellow-green and rind develops clear netting"
+      ],
+      "optimal_grain_moisture_pct": 90.0,
+      "expected_yield_range_t_ha": [15.0, 22.0],
+      "harvest_method": "Hand harvesting by twisting the stalk gently",
+      "notes": "Harvest in early morning to prevent sun heat warming the rind. Store in cool shade."
+    }
+  }
+}

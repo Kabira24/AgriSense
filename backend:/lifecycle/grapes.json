@@ -1,0 +1,83 @@
+{
+  "crop_id": "grapes",
+  "display_name": "Grapes",
+  "crop_type": "Fruit",
+  "season": "Perennial",
+  "total_duration_days": 150,
+  "stages": {
+    "sowing": {
+      "planting_window": "October 1 – November 15",
+      "method": "Planting of rooted cuttings or rootstocks on trellises",
+      "seed_rate": {
+        "value_range_kg_ha": [2000, 2500],
+        "notes": "Optimal vine density of 2000-2500 vines per hectare under Bower training system."
+      },
+      "sowing_depth_cm": {
+        "min": 30.0,
+        "max": 40.0
+      },
+      "row_spacing_cm": 250.0,
+      "plant_spacing_cm": 150.0,
+      "soil_conditions": "Well-drained sandy loam to gravelly soils with pH 6.5-7.5."
+    },
+    "irrigation": [
+      {
+        "stage_name": "Bud Burst & Shoot Growth",
+        "days_after_sowing": 20,
+        "importance": "Critical",
+        "water_depth_mm": 15,
+        "notes": "Provide daily drip irrigation to support early foliage shoot expansion."
+      },
+      {
+        "stage_name": "Flowering & Fruit Set",
+        "days_after_sowing": 50,
+        "importance": "Critical",
+        "water_depth_mm": 20,
+        "notes": "Regulated irrigation is required. Dry stress causes severe flower drop."
+      },
+      {
+        "stage_name": "Berry Development / Veraison",
+        "days_after_sowing": 95,
+        "importance": "Moderate",
+        "water_depth_mm": 25,
+        "notes": "Support expansion size of berries. Reduce irrigation before harvest to increase TSS/sugar content."
+      }
+    ],
+    "fertilizer": [
+      {
+        "stage_name": "Basal Dressing (Foundation Pruning)",
+        "days_after_sowing": 10,
+        "nutrients_kg_ha": {
+          "N": 80,
+          "P": 120,
+          "K": 100
+        },
+        "method": "Trench application along vine lines",
+        "notes": "Apply high phosphorus and potassium along with farmyard manure."
+      },
+      {
+        "stage_name": "Fruit Pruning Top Dressing",
+        "days_after_sowing": 65,
+        "nutrients_kg_ha": {
+          "N": 40,
+          "P": 0,
+          "K": 150
+        },
+        "method": "Fertigation via drip lines",
+        "notes": "Potassium application is split to ensure high TSS and flavor."
+      }
+    ],
+    "harvest": {
+      "harvest_window": "February 15 – March 31",
+      "days_after_sowing": 150,
+      "maturity_indicators": [
+        "Berries turn translucent and seed turns brown",
+        "Brix/sugar level reaches 18-20 degrees on a refractometer"
+      ],
+      "optimal_grain_moisture_pct": 80.0,
+      "expected_yield_range_t_ha": [20.0, 25.0],
+      "harvest_method": "Hand clipping of bunches using sharp shears",
+      "notes": "Sort bunches, remove decayed berries, and pre-cool harvested grapes immediately to 2-4°C."
+    }
+  }
+}

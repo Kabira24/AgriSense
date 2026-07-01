@@ -1,0 +1,83 @@
+{
+  "crop_id": "pomegranate",
+  "display_name": "Pomegranate",
+  "crop_type": "Fruit",
+  "season": "Perennial",
+  "total_duration_days": 300,
+  "stages": {
+    "sowing": {
+      "planting_window": "June 15 – August 31",
+      "method": "Planting of rooted cuttings or air-layered saplings in prepared pits",
+      "seed_rate": {
+        "value_range_kg_ha": [400, 500],
+        "notes": "Optimal vine density of 400-500 plants per hectare under 5m x 4m layout spacing."
+      },
+      "sowing_depth_cm": {
+        "min": 30.0,
+        "max": 40.0
+      },
+      "row_spacing_cm": 500.0,
+      "plant_spacing_cm": 400.0,
+      "soil_conditions": "Well-drained gravelly or sandy loam soils with pH 6.5-7.5. Tolerant to dry conditions."
+    },
+    "irrigation": [
+      {
+        "stage_name": "Establishment Phase",
+        "days_after_sowing": 30,
+        "importance": "Critical",
+        "water_depth_mm": 20,
+        "notes": "Provide light, regular drip irrigation to establish root network."
+      },
+      {
+        "stage_name": "Flower Initiation (Bahar Treatment)",
+        "days_after_sowing": 120,
+        "importance": "Moderate",
+        "water_depth_mm": 10,
+        "notes": "Drought stress induced for 1 month, followed by heavy watering to trigger uniform flowering."
+      },
+      {
+        "stage_name": "Fruit Development",
+        "days_after_sowing": 240,
+        "importance": "Critical",
+        "water_depth_mm": 30,
+        "notes": "Maintain consistent moisture. Irregular watering causes severe fruit cracking."
+      }
+    ],
+    "fertilizer": [
+      {
+        "stage_name": "Pruning Phase (Basal Dressing)",
+        "days_after_sowing": 10,
+        "nutrients_kg_ha": {
+          "N": 100,
+          "P": 120,
+          "K": 100
+        },
+        "method": "Ring basin application during pruning",
+        "notes": "Mix fertilizers with farmyard manure and neem cake."
+      },
+      {
+        "stage_name": "Post-Fruit Set Top Dressing",
+        "days_after_sowing": 180,
+        "nutrients_kg_ha": {
+          "N": 50,
+          "P": 0,
+          "K": 150
+        },
+        "method": "Drip fertigation or soil ring application",
+        "notes": "High potassium boosts fruit weight, rind coloring, and sweetness."
+      }
+    ],
+    "harvest": {
+      "harvest_window": "April 1 – May 15",
+      "days_after_sowing": 300,
+      "maturity_indicators": [
+        "Rind turns from dark green to yellowish-red or bright red",
+        "Fruit shapes become angular instead of round, and metallic sound is heard when tapped"
+      ],
+      "optimal_grain_moisture_pct": 78.0,
+      "expected_yield_range_t_ha": [12.0, 18.0],
+      "harvest_method": "Hand clipping of fruits using sharp secateurs",
+      "notes": "Harvest in early morning. Wrap fruits in tissue paper and pack in ventilated cartons."
+    }
+  }
+}

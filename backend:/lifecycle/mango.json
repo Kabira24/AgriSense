@@ -1,0 +1,83 @@
+{
+  "crop_id": "mango",
+  "display_name": "Mango",
+  "crop_type": "Fruit",
+  "season": "Perennial",
+  "total_duration_days": 365,
+  "stages": {
+    "sowing": {
+      "planting_window": "July 1 – August 31",
+      "method": "Planting of grafted saplings (e.g. stone grafting/inarching) in prepared pits",
+      "seed_rate": {
+        "value_range_kg_ha": [100, 120],
+        "notes": "100-120 grafted saplings per hectare under standard 10m x 10m spacing layout."
+      },
+      "sowing_depth_cm": {
+        "min": 45.0,
+        "max": 60.0
+      },
+      "row_spacing_cm": 1000.0,
+      "plant_spacing_cm": 1000.0,
+      "soil_conditions": "Deep, well-drained, red sandy loam or alluvial soils with pH 5.5-7.5."
+    },
+    "irrigation": [
+      {
+        "stage_name": "Young Tree Establishment",
+        "days_after_sowing": 30,
+        "importance": "Critical",
+        "water_depth_mm": 25,
+        "notes": "Irrigate young saplings every 3-4 days in dry weather."
+      },
+      {
+        "stage_name": "Vegetative Growth (Flushes)",
+        "days_after_sowing": 150,
+        "importance": "Moderate",
+        "water_depth_mm": 20,
+        "notes": "Support active stem growth. Stop irrigation 2-3 months before flowering to induce dormancy."
+      },
+      {
+        "stage_name": "Fruit Development Phase",
+        "days_after_sowing": 270,
+        "importance": "Critical",
+        "water_depth_mm": 35,
+        "notes": "Critical moisture phase. Water stress causes fruit drop and small sizes."
+      }
+    ],
+    "fertilizer": [
+      {
+        "stage_name": "First Dose (Post-Harvest Pruning)",
+        "days_after_sowing": 30,
+        "nutrients_kg_ha": {
+          "N": 100,
+          "P": 50,
+          "K": 100
+        },
+        "method": "Ring application in tree basin",
+        "notes": "Apply mixed with well-decomposed manure after post-harvest cleaning."
+      },
+      {
+        "stage_name": "Second Dose (Fruit Set Stage)",
+        "days_after_sowing": 240,
+        "nutrients_kg_ha": {
+          "N": 50,
+          "P": 50,
+          "K": 100
+        },
+        "method": "Soil surface application in tree basin drip line",
+        "notes": "Potassium helps in fruit sizing, flavor development, and quality."
+      }
+    ],
+    "harvest": {
+      "harvest_window": "May 1 – June 30",
+      "days_after_sowing": 365,
+      "maturity_indicators": [
+        "Fruit shoulders align with stem or become raised, ground color changes to light green/yellow",
+        "Sap flow from pedicel decreases and skin develops a waxy bloom"
+      ],
+      "optimal_grain_moisture_pct": 82.0,
+      "expected_yield_range_t_ha": [8.0, 15.0],
+      "harvest_method": "Hand harvesting with pedicel snaps or using mango poles",
+      "notes": "Keep 1-2 cm stalk intact during harvest to prevent latex burn on skin. Store at 12-14°C."
+    }
+  }
+}

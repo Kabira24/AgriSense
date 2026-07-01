@@ -1,0 +1,76 @@
+{
+  "crop_id": "jute",
+  "display_name": "Jute",
+  "crop_type": "Fiber",
+  "season": "Kharif",
+  "total_duration_days": 120,
+  "stages": {
+    "sowing": {
+      "planting_window": "March 15 – May 15",
+      "method": "Broadcasting or Line Sowing (drill)",
+      "seed_rate": {
+        "value_range_kg_ha": [6, 8],
+        "notes": "6 kg/ha for line sowing; 8-10 kg/ha for broadcasting method."
+      },
+      "sowing_depth_cm": {
+        "min": 2.0,
+        "max": 3.0
+      },
+      "row_spacing_cm": 30.0,
+      "plant_spacing_cm": 8.0,
+      "soil_conditions": "Fertile alluvial soils (silty loam) in warm, humid tropical zones."
+    },
+    "irrigation": [
+      {
+        "stage_name": "Seedling Germination & Shoot Expansion",
+        "days_after_sowing": 15,
+        "importance": "Moderate",
+        "water_depth_mm": 20,
+        "notes": "Provide light irrigation. Jute is susceptible to waterlogging at young stages."
+      },
+      {
+        "stage_name": "Rapid Stem Elongation Phase",
+        "days_after_sowing": 60,
+        "importance": "Critical",
+        "water_depth_mm": 35,
+        "notes": "Ensure high soil moisture. Fiber yield depends on rapid growth."
+      }
+    ],
+    "fertilizer": [
+      {
+        "stage_name": "Basal Application",
+        "days_after_sowing": 0,
+        "nutrients_kg_ha": {
+          "N": 20,
+          "P": 40,
+          "K": 40
+        },
+        "method": "Soil incorporation during tillage",
+        "notes": "NPK enhances early root establishment and stem fiber strength."
+      },
+      {
+        "stage_name": "First Top Dressing (Weeding/Thinning)",
+        "days_after_sowing": 40,
+        "nutrients_kg_ha": {
+          "N": 40,
+          "P": 0,
+          "K": 0
+        },
+        "method": "Broadcasting between rows after thinning",
+        "notes": "High nitrogen dressing stimulates rapid cell division and shoot elongation."
+      }
+    ],
+    "harvest": {
+      "harvest_window": "July 15 – September 15",
+      "days_after_sowing": 120,
+      "maturity_indicators": [
+        "Plants reach early pod-formation stage",
+        "Ground leaves begin to drop and stem colors lighten"
+      ],
+      "optimal_grain_moisture_pct": 14.0,
+      "expected_yield_range_t_ha": [2.0, 3.0],
+      "harvest_method": "Cutting stems manually close to ground level",
+      "notes": "Tie stems in bundles, leave in field for 3 days to shed leaves, then submerge in water for retting (15-20 days)."
+    }
+  }
+}

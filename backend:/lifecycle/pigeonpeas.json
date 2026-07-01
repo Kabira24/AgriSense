@@ -1,0 +1,65 @@
+{
+  "crop_id": "pigeonpeas",
+  "display_name": "Pigeonpeas",
+  "crop_type": "Pulse",
+  "season": "Kharif",
+  "total_duration_days": 180,
+  "stages": {
+    "sowing": {
+      "planting_window": "June 1 – July 15",
+      "method": "Line Sowing or Dibbling",
+      "seed_rate": {
+        "value_range_kg_ha": [12, 15],
+        "notes": "12-15 kg/ha of seeds is optimal; higher rates for late-sown crops."
+      },
+      "sowing_depth_cm": {
+        "min": 4.0,
+        "max": 5.0
+      },
+      "row_spacing_cm": 60.0,
+      "plant_spacing_cm": 20.0,
+      "soil_conditions": "Well-drained deep loamy soils with pH 6.5-7.5. Avoid fields prone to flooding."
+    },
+    "irrigation": [
+      {
+        "stage_name": "Flower Initiation Phase",
+        "days_after_sowing": 95,
+        "importance": "Critical",
+        "water_depth_mm": 30,
+        "notes": "First critical moisture stage. Water stress reduces flower clusters."
+      },
+      {
+        "stage_name": "Pod Development Stage",
+        "days_after_sowing": 140,
+        "importance": "Critical",
+        "water_depth_mm": 30,
+        "notes": "Ensure adequate soil moisture to prevent seed shriveling inside pods."
+      }
+    ],
+    "fertilizer": [
+      {
+        "stage_name": "Basal Application",
+        "days_after_sowing": 0,
+        "nutrients_kg_ha": {
+          "N": 20,
+          "P": 50,
+          "K": 20
+        },
+        "method": "Fertilizer drilling at seed placement line",
+        "notes": "Rhizobium and Phosphate Solubilizing Bacteria (PSB) seed inoculation is advised."
+      }
+    ],
+    "harvest": {
+      "harvest_window": "November 25 – December 31",
+      "days_after_sowing": 180,
+      "maturity_indicators": [
+        "More than 80% of pods turn light brown and dry up",
+        "Pods rattle when shaken indicating dry seeds inside"
+      ],
+      "optimal_grain_moisture_pct": 14.0,
+      "expected_yield_range_t_ha": [1.5, 2.5],
+      "harvest_method": "Cutting plants close to ground and stacking them for sun drying",
+      "notes": "Dry harvested plants for 1 week, then thresh by beating with sticks or using mechanical thrashers."
+    }
+  }
+}

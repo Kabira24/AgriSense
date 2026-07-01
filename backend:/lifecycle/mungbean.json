@@ -1,0 +1,65 @@
+{
+  "crop_id": "mungbean",
+  "display_name": "Mungbean",
+  "crop_type": "Pulse",
+  "season": "Kharif",
+  "total_duration_days": 75,
+  "stages": {
+    "sowing": {
+      "planting_window": "June 15 – July 15",
+      "method": "Line Sowing or Drilling",
+      "seed_rate": {
+        "value_range_kg_ha": [15, 20],
+        "notes": "15-20 kg/ha for Kharif sowing; Zaid (summer) sowing requires 25 kg/ha."
+      },
+      "sowing_depth_cm": {
+        "min": 3.0,
+        "max": 5.0
+      },
+      "row_spacing_cm": 30.0,
+      "plant_spacing_cm": 10.0,
+      "soil_conditions": "Well-drained sandy loam soils with pH 6.0-7.0."
+    },
+    "irrigation": [
+      {
+        "stage_name": "Flowering Stage",
+        "days_after_sowing": 35,
+        "importance": "Critical",
+        "water_depth_mm": 20,
+        "notes": "Ensure light soil moisture. Excess water restricts nodulation."
+      },
+      {
+        "stage_name": "Pod Development Stage",
+        "days_after_sowing": 55,
+        "importance": "Critical",
+        "water_depth_mm": 25,
+        "notes": "Avoid dry conditions during pod expansion."
+      }
+    ],
+    "fertilizer": [
+      {
+        "stage_name": "Basal Dressing",
+        "days_after_sowing": 0,
+        "nutrients_kg_ha": {
+          "N": 20,
+          "P": 40,
+          "K": 20
+        },
+        "method": "Band placement under seed lines",
+        "notes": "Nitrogen requirement is minimal. Apply P for active rooting."
+      }
+    ],
+    "harvest": {
+      "harvest_window": "August 25 – September 15",
+      "days_after_sowing": 75,
+      "maturity_indicators": [
+        "More than 80% of pods turn dark brown or black",
+        "Foliage dries and drops off"
+      ],
+      "optimal_grain_moisture_pct": 14.0,
+      "expected_yield_range_t_ha": [0.8, 1.2],
+      "harvest_method": "Hand picking of pods (multiple pickings) or cutting stems",
+      "notes": "Sun-dry pods for 2-3 days before manual threshing to minimize storage insects."
+    }
+  }
+}

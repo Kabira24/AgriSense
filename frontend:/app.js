@@ -11,9 +11,12 @@
      • API call to /risk           (risk assessment engine, port 8003)
      • API call to /advise         (AI advisor / Gemini, port 8004)
      • API call to /planner        (crop operations planner, port 8005)
+     • API call to /latest-sensor  (IoT sensor feed, port 8006)
+     • Input mode toggle: Manual Mode vs Live Sensor Mode
+     • Live sensor polling: fetches /latest-sensor every 10 s in Sensor Mode
      • Tab switcher navigation controller
      • Real-time Farm Health Score calculation (pH, Temperature, Moisture)
-     • Live Diagnostics health polling for all 6 microservices
+     • Live Diagnostics health polling for all 7 microservices
      • Operations timeline rendering with planting window status
      • Interactive crop navigation shortcut buttons
    ─────────────────────────────────────────────────────────────────────────── */
@@ -26,6 +29,13 @@ const WEATHER_BASE = 'http://localhost:8002';
 const RISK_BASE    = 'http://localhost:8003';
 const ADVISOR_BASE = 'http://localhost:8004';
 const PLANNER_BASE = 'http://localhost:8005';
+const SENSOR_BASE  = 'http://localhost:8006';  // Live Sensor Feed (mock → IoT)
+
+// ── Sensor Mode State ────────────────────────────────────────────────────────
+// Tracks whether the form is in Manual or Live Sensor polling mode.
+let _sensorMode    = 'manual';   // 'manual' | 'sensor'
+let _sensorPollId  = null;       // setInterval handle for the 10 s polling loop
+
 
 // Stores the last successful responses for cross-service wiring.
 let _lastPredictResult  = null;
@@ -54,7 +64,8 @@ const SERVICES = [
   { name: 'weather', url: `${WEATHER_BASE}/health` },
   { name: 'risk',    url: `${RISK_BASE}/health` },
   { name: 'advisor', url: `${ADVISOR_BASE}/health` },
-  { name: 'planner', url: `${PLANNER_BASE}/health` }
+  { name: 'planner', url: `${PLANNER_BASE}/health` },
+  { name: 'sensor',  url: `${SENSOR_BASE}/health` },  // IoT sensor feed (port 8006)
 ];
 
 // ── Weather condition icon map (Open-Meteo precipitation → icon) ─────────────
@@ -170,7 +181,7 @@ async function checkHealth() {
     label.textContent = 'API Offline';
   }
 
-  // 2. Query all 6 microservices concurrently for the System Health tab
+  // 2. Query all 7 microservices concurrently for the System Health tab
   SERVICES.forEach(async svc => {
     const sDot = document.getElementById(`health-${svc.name}-dot`);
     const sLabel = document.getElementById(`health-${svc.name}-label`);
@@ -185,14 +196,17 @@ async function checkHealth() {
       }
     } catch (_) { /* ignore */ }
 
+    const sBadge = sDot.closest('.diagnostic-status');
     if (ok) {
       sDot.classList.add('online');
       sLabel.textContent = 'online';
-      sLabel.style.color = '#10b981';
+      sLabel.style.color = '#15803d';
+      if (sBadge) sBadge.classList.add('online-status');
     } else {
       sDot.classList.remove('online');
       sLabel.textContent = 'offline';
-      sLabel.style.color = '#ef4444';
+      sLabel.style.color = '#dc2626';
+      if (sBadge) sBadge.classList.remove('online-status');
     }
   });
 }
@@ -231,7 +245,7 @@ function updateFarmHealthScore() {
   const statusEl = document.getElementById('health-score-status');
   if (totalScore >= 85) {
     statusEl.textContent = 'Optimal';
-    statusEl.style.color = '#10b981';
+    statusEl.style.color = '#16a34a';
   } else if (totalScore >= 70) {
     statusEl.textContent = 'Good';
     statusEl.style.color = '#3b82f6';
@@ -891,6 +905,65 @@ function showPlannerResults(data) {
   }).join('');
 }
 
+// ── Live Sensor Feed helpers ───────────────────────────────────────────
+
+/**
+ * Fetch /latest-sensor from sensor.py and update the dashboard card values.
+ * Also optionally auto-fill the soil form if Sensor Mode is active.
+ */
+async function fetchAndApplySensorData(autofillForm = false) {
+  try {
+    const res = await fetch(`${SENSOR_BASE}/latest-sensor`, {
+      signal: AbortSignal.timeout(5000),
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+
+    // ── Update sensor feed card on Dashboard ───────────────────────────
+    const tempEl     = document.getElementById('sensor-temp');
+    const humEl      = document.getElementById('sensor-humidity');
+    const moistEl    = document.getElementById('sensor-moisture');
+    const phEl       = document.getElementById('sensor-ph');
+    if (tempEl)  tempEl.textContent  = data.temperature.toFixed(1);
+    if (humEl)   humEl.textContent   = data.humidity.toFixed(1);
+    if (moistEl) moistEl.textContent = data.soil_moisture.toFixed(1);
+    if (phEl)    phEl.textContent    = data.ph.toFixed(1);
+
+    // ── Auto-fill the Crop Analysis form in Sensor Mode ──────────────────
+    if (autofillForm) {
+      setFieldValue('temperature', data.temperature.toFixed(1));
+      setFieldValue('humidity',    data.humidity.toFixed(1));
+      setFieldValue('ph',          data.ph.toFixed(1));
+      // soil_moisture is % vol; we don't map to rainfall directly,
+      // but we can fill humidity. Rainfall remains user-editable in sensor mode.
+      // To map soil_moisture → rainfall, add logic here in the future.
+    }
+
+  } catch (_) {
+    // Sensor service offline — silently ignore; dashboard shows '--'
+  }
+}
+
+/**
+ * Start polling the sensor endpoint every 10 seconds.
+ * Sensor data is applied to both the dashboard card and the form.
+ */
+function startSensorPolling() {
+  if (_sensorPollId !== null) return;  // already running
+  fetchAndApplySensorData(true);       // immediate first fetch
+  _sensorPollId = setInterval(() => fetchAndApplySensorData(true), 10_000);
+}
+
+/**
+ * Stop the sensor polling loop.
+ */
+function stopSensorPolling() {
+  if (_sensorPollId !== null) {
+    clearInterval(_sensorPollId);
+    _sensorPollId = null;
+  }
+}
+
 // ── Bootstrap ─────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   initParticles();
@@ -898,6 +971,11 @@ document.addEventListener('DOMContentLoaded', () => {
   updateFarmHealthScore();
   checkHealth();
   setInterval(checkHealth, 30_000);
+
+  // Initial sensor feed fetch (dashboard card only, no form autofill in manual mode)
+  fetchAndApplySensorData(false);
+  // Refresh sensor card every 30 s even in manual mode (dashboard display only)
+  setInterval(() => { if (_sensorMode === 'manual') fetchAndApplySensorData(false); }, 30_000);
 
   // Set default calendar sowing date to today
   const plannerDate = document.getElementById('planner-date');
@@ -945,6 +1023,43 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
     switchTab('planner');
   });
+
+  // ── Input Mode Toggle (Manual ↔ Live Sensor) ───────────────────────────
+  const modeManualBtn = document.getElementById('mode-manual-btn');
+  const modeSensorBtn = document.getElementById('mode-sensor-btn');
+  const sensorModeStatus = document.getElementById('sensor-mode-status');
+  const sensorModeText   = document.getElementById('sensor-mode-text');
+
+  function setInputMode(mode) {
+    _sensorMode = mode;
+
+    if (mode === 'sensor') {
+      modeManualBtn.classList.remove('active');
+      modeSensorBtn.classList.add('active');
+      sensorModeStatus.hidden = false;
+      sensorModeText.textContent = 'Live Sensor Mode active — fetching every 10 s…';
+      // Disable the four soil inputs so user can’t override sensor values
+      ['ph', 'temperature', 'humidity', 'ph-slider', 'temperature-slider', 'humidity-slider'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.setAttribute('readonly', 'true');
+      });
+      startSensorPolling();
+    } else {
+      // Manual mode
+      modeManualBtn.classList.add('active');
+      modeSensorBtn.classList.remove('active');
+      sensorModeStatus.hidden = true;
+      // Re-enable the inputs
+      ['ph', 'temperature', 'humidity', 'ph-slider', 'temperature-slider', 'humidity-slider'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.removeAttribute('readonly');
+      });
+      stopSensorPolling();
+    }
+  }
+
+  modeManualBtn.addEventListener('click', () => setInputMode('manual'));
+  modeSensorBtn.addEventListener('click', () => setInputMode('sensor'));
 
   // Preset buttons
   document.querySelectorAll('.preset-btn').forEach(btn => {

@@ -1,0 +1,94 @@
+{
+  "crop_id": "papaya",
+  "display_name": "Papaya",
+  "crop_type": "Fruit",
+  "season": "Perennial",
+  "total_duration_days": 270,
+  "stages": {
+    "sowing": {
+      "planting_window": "June 15 – September 15",
+      "method": "Planting of nursery-grown seedlings (45-60 days old) in prepared pits",
+      "seed_rate": {
+        "value_range_kg_ha": [2500, 3000],
+        "notes": "Planting density of 2500-3000 seedlings per hectare under 1.8m x 1.8m layout."
+      },
+      "sowing_depth_cm": {
+        "min": 15.0,
+        "max": 20.0
+      },
+      "row_spacing_cm": 180.0,
+      "plant_spacing_cm": 180.0,
+      "soil_conditions": "Well-drained sandy-loam soils with pH 6.0-6.5. Papaya is extremely sensitive to waterlogging."
+    },
+    "irrigation": [
+      {
+        "stage_name": "Sapling Establishment Phase",
+        "days_after_sowing": 25,
+        "importance": "Critical",
+        "water_depth_mm": 20,
+        "notes": "Irrigate young plants regularly. Use collar drains to prevent collar rot."
+      },
+      {
+        "stage_name": "Flowering & Fruit Set",
+        "days_after_sowing": 120,
+        "importance": "Critical",
+        "water_depth_mm": 30,
+        "notes": "Ensure steady moisture. Dry stress triggers flower drop and fruit abortion."
+      },
+      {
+        "stage_name": "Fruit Growth & Ripening",
+        "days_after_sowing": 210,
+        "importance": "Moderate",
+        "water_depth_mm": 25,
+        "notes": "Irrigate consistently. Reduce watering as fruit ripening approaches."
+      }
+    ],
+    "fertilizer": [
+      {
+        "stage_name": "Basal Dressing (Pit Prep)",
+        "days_after_sowing": 10,
+        "nutrients_kg_ha": {
+          "N": 50,
+          "P": 100,
+          "K": 100
+        },
+        "method": "Soil incorporation during pit preparation",
+        "notes": "Mix nutrients with farmyard manure and bone meal."
+      },
+      {
+        "stage_name": "Flowering Stage Top Feed",
+        "days_after_sowing": 100,
+        "nutrients_kg_ha": {
+          "N": 100,
+          "P": 50,
+          "K": 100
+        },
+        "method": "Soil surface application in tree basin",
+        "notes": "Encourages vigorous flowering and fruit set growth."
+      },
+      {
+        "stage_name": "Fruit Expansion Feed",
+        "days_after_sowing": 180,
+        "nutrients_kg_ha": {
+          "N": 50,
+          "P": 0,
+          "K": 100
+        },
+        "method": "Basin ring application",
+        "notes": "High potassium boosts fruit sweetness, color, and size."
+      }
+    ],
+    "harvest": {
+      "harvest_window": "March 1 – May 30",
+      "days_after_sowing": 270,
+      "maturity_indicators": [
+        "Skin ground color changes from dark green to light green-yellow at apical end (color break)",
+        "Latex of fruit becomes watery instead of milky-white"
+      ],
+      "optimal_grain_moisture_pct": 88.0,
+      "expected_yield_range_t_ha": [40.0, 60.0],
+      "harvest_method": "Hand plucking or using wooden poles with cotton nets",
+      "notes": "Harvest fruits carefully to avoid skin scratches. Ripen harvested fruits at room temperature."
+    }
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "crop_id": "coconut",
+  "display_name": "Coconut",
+  "crop_type": "Plantation",
+  "season": "Perennial",
+  "total_duration_days": 365,
+  "stages": {
+    "sowing": {
+      "planting_window": "June 1 – September 15",
+      "method": "Planting of 9-12 month old seedbed saplings in prepared pits",
+      "seed_rate": {
+        "value_range_kg_ha": [150, 180],
+        "notes": "150-180 seedlings per hectare under square planting layout."
+      },
+      "sowing_depth_cm": {
+        "min": 60.0,
+        "max": 90.0
+      },
+      "row_spacing_cm": 750.0,
+      "plant_spacing_cm": 750.0,
+      "soil_conditions": "Sandy loam, alluvial, and red loamy coastal soils with good drainage."
+    },
+    "irrigation": [
+      {
+        "stage_name": "Sapling Establishment Phase",
+        "days_after_sowing": 30,
+        "importance": "Critical",
+        "water_depth_mm": 30,
+        "notes": "Irrigate newly planted saplings every 2-3 days in summer."
+      },
+      {
+        "stage_name": "Active Rooting Expansion",
+        "days_after_sowing": 120,
+        "importance": "Moderate",
+        "water_depth_mm": 25,
+        "notes": "Ensure consistent drip irrigation in basin areas."
+      },
+      {
+        "stage_name": "Dry Spell Stress Relief",
+        "days_after_sowing": 240,
+        "importance": "Critical",
+        "water_depth_mm": 40,
+        "notes": "Provide deep soaking during winter dry intervals."
+      }
+    ],
+    "fertilizer": [
+      {
+        "stage_name": "Basal Application (Establishment)",
+        "days_after_sowing": 30,
+        "nutrients_kg_ha": {
+          "N": 150,
+          "P": 160,
+          "K": 300
+        },
+        "method": "Circular basin ring placement",
+        "notes": "Apply first fertilizer dose 3 months after planting, mixed with compost."
+      },
+      {
+        "stage_name": "Half-Year Boost",
+        "days_after_sowing": 180,
+        "nutrients_kg_ha": {
+          "N": 150,
+          "P": 160,
+          "K": 300
+        },
+        "method": "Soil trench incorporation in basins",
+        "notes": "Apply during monsoon recess to support robust stem and leaf structure."
+      }
+    ],
+    "harvest": {
+      "harvest_window": "May 1 – June 30",
+      "days_after_sowing": 365,
+      "maturity_indicators": [
+        "Nuts turn brown and husk becomes dry (fully mature)",
+        "Water level inside nut decreases producing a hollow sound when shaken"
+      ],
+      "optimal_grain_moisture_pct": 50.0,
+      "expected_yield_range_t_ha": [5.0, 8.0],
+      "harvest_method": "Manual tree climbing or harvesting using long pole knives",
+      "notes": "For copra production, store harvested nuts for 1 month before dehusking."
+    }
+  }
+}

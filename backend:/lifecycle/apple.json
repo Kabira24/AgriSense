@@ -1,0 +1,83 @@
+{
+  "crop_id": "apple",
+  "display_name": "Apple",
+  "crop_type": "Fruit",
+  "season": "Perennial",
+  "total_duration_days": 150,
+  "stages": {
+    "sowing": {
+      "planting_window": "December 15 – January 31",
+      "method": "Planting of grafted bare-root saplings",
+      "seed_rate": {
+        "value_range_kg_ha": [250, 400],
+        "notes": "Planting density of 250-400 plants per hectare depending on dwarfing rootstock."
+      },
+      "sowing_depth_cm": {
+        "min": 30.0,
+        "max": 45.0
+      },
+      "row_spacing_cm": 400.0,
+      "plant_spacing_cm": 300.0,
+      "soil_conditions": "Well-drained, deep loamy soils with pH 6.0-6.5 in cool temperate climates."
+    },
+    "irrigation": [
+      {
+        "stage_name": "Sapling Establishment / Bud Break",
+        "days_after_sowing": 30,
+        "importance": "Critical",
+        "water_depth_mm": 20,
+        "notes": "Maintain moderate soil moisture around roots. Avoid waterlogging."
+      },
+      {
+        "stage_name": "Flowering & Fruit Set",
+        "days_after_sowing": 75,
+        "importance": "Critical",
+        "water_depth_mm": 35,
+        "notes": "Critical moisture phase. Water stress causes flower drop and reduced fruit set."
+      },
+      {
+        "stage_name": "Fruit Development",
+        "days_after_sowing": 110,
+        "importance": "Moderate",
+        "water_depth_mm": 25,
+        "notes": "Regular watering ensures uniform fruit sizing and prevents fruit cracking."
+      }
+    ],
+    "fertilizer": [
+      {
+        "stage_name": "Basal Application (Winter Dormancy)",
+        "days_after_sowing": 10,
+        "nutrients_kg_ha": {
+          "N": 50,
+          "P": 60,
+          "K": 80
+        },
+        "method": "Ring placement around the tree basin",
+        "notes": "Apply well-decomposed Farmyard Manure (FYM) along with NPK."
+      },
+      {
+        "stage_name": "Post-Bloom Nitrogen Dressing",
+        "days_after_sowing": 85,
+        "nutrients_kg_ha": {
+          "N": 40,
+          "P": 0,
+          "K": 0
+        },
+        "method": "Soil surface broadcasting in tree basins",
+        "notes": "Boosts vegetative growth and supports early fruit set development."
+      }
+    ],
+    "harvest": {
+      "harvest_window": "August 15 – October 15",
+      "days_after_sowing": 150,
+      "maturity_indicators": [
+        "Change of ground color from green to yellow or red",
+        "Ease of fruit separation from the spur (pedicel snaps off easily)"
+      ],
+      "optimal_grain_moisture_pct": 85.0,
+      "expected_yield_range_t_ha": [10.0, 20.0],
+      "harvest_method": "Manual hand plucking with stalks intact",
+      "notes": "Store harvested apples in cool storage at 0-2°C with high relative humidity."
+    }
+  }
+}

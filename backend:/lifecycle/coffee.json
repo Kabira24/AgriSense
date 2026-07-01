@@ -1,0 +1,83 @@
+{
+  "crop_id": "coffee",
+  "display_name": "Coffee",
+  "crop_type": "Plantation",
+  "season": "Perennial",
+  "total_duration_days": 365,
+  "stages": {
+    "sowing": {
+      "planting_window": "June 15 – August 31",
+      "method": "Planting of nursery-grown seedlings or cuttings in shaded pits",
+      "seed_rate": {
+        "value_range_kg_ha": [2500, 3000],
+        "notes": "Optimal plant population of 2500-3000 seedlings per hectare."
+      },
+      "sowing_depth_cm": {
+        "min": 25.0,
+        "max": 30.0
+      },
+      "row_spacing_cm": 200.0,
+      "plant_spacing_cm": 200.0,
+      "soil_conditions": "Deep, well-drained, acidic, humus-rich soils with pH 5.0-6.0 under partial shade trees."
+    },
+    "irrigation": [
+      {
+        "stage_name": "Sapling Establishment Phase",
+        "days_after_sowing": 30,
+        "importance": "Critical",
+        "water_depth_mm": 20,
+        "notes": "Water twice a week during dry periods to ensure sapling root setting."
+      },
+      {
+        "stage_name": "Blossom Showers / Bud Growth",
+        "days_after_sowing": 150,
+        "importance": "Critical",
+        "water_depth_mm": 25,
+        "notes": "Simulated blossom showers (sprinkler irrigation) trigger uniform flowering."
+      },
+      {
+        "stage_name": "Backing Showers / Fruit Set",
+        "days_after_sowing": 180,
+        "importance": "Critical",
+        "water_depth_mm": 20,
+        "notes": "Essential to prevent flower drop and ensure initial berry development."
+      }
+    ],
+    "fertilizer": [
+      {
+        "stage_name": "Basal Application",
+        "days_after_sowing": 20,
+        "nutrients_kg_ha": {
+          "N": 40,
+          "P": 30,
+          "K": 40
+        },
+        "method": "Ring placement around the drip line",
+        "notes": "Incorporate under leaf mulch layers in the plant basin."
+      },
+      {
+        "stage_name": "Post-Monsoon Booster",
+        "days_after_sowing": 160,
+        "nutrients_kg_ha": {
+          "N": 40,
+          "P": 0,
+          "K": 40
+        },
+        "method": "Soil surface application below shade canopy",
+        "notes": "Promotes healthy canopy recovery after monsoon heavy rains."
+      }
+    ],
+    "harvest": {
+      "harvest_window": "November 1 – December 31",
+      "days_after_sowing": 365,
+      "maturity_indicators": [
+        "Berries turn bright red or crimson (cherry stage)",
+        "Berries yield slightly when pressed between fingers"
+      ],
+      "optimal_grain_moisture_pct": 12.0,
+      "expected_yield_range_t_ha": [0.8, 1.5],
+      "harvest_method": "Selective hand picking of ripe cherries",
+      "notes": "Process harvested cherries immediately (wet pulping or dry sun drying) to avoid fermentation."
+    }
+  }
+}

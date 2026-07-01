@@ -1,0 +1,94 @@
+{
+  "crop_id": "banana",
+  "display_name": "Banana",
+  "crop_type": "Fruit",
+  "season": "Perennial",
+  "total_duration_days": 300,
+  "stages": {
+    "sowing": {
+      "planting_window": "June 15 – July 31",
+      "method": "Planting of sword suckers or tissue culture plantlets",
+      "seed_rate": {
+        "value_range_kg_ha": [2500, 3000],
+        "notes": "Optimal planting density of 2500-3000 suckers per hectare."
+      },
+      "sowing_depth_cm": {
+        "min": 30.0,
+        "max": 45.0
+      },
+      "row_spacing_cm": 180.0,
+      "plant_spacing_cm": 180.0,
+      "soil_conditions": "Rich, well-drained fertile clayey-loam soils with pH 6.5-7.5."
+    },
+    "irrigation": [
+      {
+        "stage_name": "Vegetative Phase Growth",
+        "days_after_sowing": 30,
+        "importance": "Critical",
+        "water_depth_mm": 40,
+        "notes": "Banana is a water-loving plant; ensure soil remains consistently moist."
+      },
+      {
+        "stage_name": "Inflorescence / Bunch Emergence",
+        "days_after_sowing": 180,
+        "importance": "Critical",
+        "water_depth_mm": 50,
+        "notes": "Critical moisture requirement during flowering and bunch initiation."
+      },
+      {
+        "stage_name": "Fruit Development & Maturity",
+        "days_after_sowing": 240,
+        "importance": "Moderate",
+        "water_depth_mm": 35,
+        "notes": "Irrigate regularly to support fingers filling out."
+      }
+    ],
+    "fertilizer": [
+      {
+        "stage_name": "Basal Application (Planting)",
+        "days_after_sowing": 15,
+        "nutrients_kg_ha": {
+          "N": 50,
+          "P": 90,
+          "K": 100
+        },
+        "method": "Pit application mixed with organic manure",
+        "notes": "Apply high phosphorus early on for root development."
+      },
+      {
+        "stage_name": "Mid-Term Vegetative Dressing",
+        "days_after_sowing": 120,
+        "nutrients_kg_ha": {
+          "N": 100,
+          "P": 0,
+          "K": 100
+        },
+        "method": "Side dressing and soil incorporation",
+        "notes": "Split application to support massive vegetative canopy."
+      },
+      {
+        "stage_name": "Pre-Flowering K Dressing",
+        "days_after_sowing": 200,
+        "nutrients_kg_ha": {
+          "N": 50,
+          "P": 0,
+          "K": 100
+        },
+        "method": "Soil surface ring application",
+        "notes": "High Potassium is critical for bunch quality and finger size."
+      }
+    ],
+    "harvest": {
+      "harvest_window": "April 1 – May 31",
+      "days_after_sowing": 300,
+      "maturity_indicators": [
+        "Fingers become full and angularity disappears (become rounded)",
+        "Dry leaves on plant increase and top leaves turn yellow"
+      ],
+      "optimal_grain_moisture_pct": 75.0,
+      "expected_yield_range_t_ha": [30.0, 50.0],
+      "harvest_method": "Cutting bunch with sharp sickle leaving 30cm stalk",
+      "notes": "Handle bunches carefully to avoid bruising. Store in ventilated crates."
+    }
+  }
+}

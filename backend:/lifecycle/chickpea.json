@@ -1,0 +1,65 @@
+{
+  "crop_id": "chickpea",
+  "display_name": "Chickpea",
+  "crop_type": "Pulse",
+  "season": "Rabi",
+  "total_duration_days": 110,
+  "stages": {
+    "sowing": {
+      "planting_window": "October 15 – November 15",
+      "method": "Drilling or Line Sowing",
+      "seed_rate": {
+        "value_range_kg_ha": [75, 80],
+        "notes": "Higher seed rates are recommended for bold-seeded Kabuli varieties."
+      },
+      "sowing_depth_cm": {
+        "min": 8.0,
+        "max": 10.0
+      },
+      "row_spacing_cm": 30.0,
+      "plant_spacing_cm": 10.0,
+      "soil_conditions": "Deep, well-drained loamy soils. Avoid saline/alkaline fields."
+    },
+    "irrigation": [
+      {
+        "stage_name": "Pre-flowering branching stage",
+        "days_after_sowing": 35,
+        "importance": "Moderate",
+        "water_depth_mm": 20,
+        "notes": "Light irrigation promotes healthy branching. Excess water causes excessive vegetative growth."
+      },
+      {
+        "stage_name": "Pod Development Stage",
+        "days_after_sowing": 75,
+        "importance": "Critical",
+        "water_depth_mm": 25,
+        "notes": "Critical water phase. Ensure crop is not subjected to drought stress."
+      }
+    ],
+    "fertilizer": [
+      {
+        "stage_name": "Basal Dressing",
+        "days_after_sowing": 0,
+        "nutrients_kg_ha": {
+          "N": 20,
+          "P": 50,
+          "K": 20
+        },
+        "method": "Fertilizer drilling at sowing time",
+        "notes": "Rhizobium inoculation of seeds is highly recommended before sowing."
+      }
+    ],
+    "harvest": {
+      "harvest_window": "February 1 – February 28",
+      "days_after_sowing": 110,
+      "maturity_indicators": [
+        "Leaves turn yellow and begin to shed",
+        "Pods turn light brown/yellow and seeds rattle when pods are shaken"
+      ],
+      "optimal_grain_moisture_pct": 15.0,
+      "expected_yield_range_t_ha": [1.5, 2.2],
+      "harvest_method": "Pulling up plants manually or cutting with sickle",
+      "notes": "Thresh plants after sun drying for 5-6 days. Target storage moisture is 10-12%."
+    }
+  }
+}

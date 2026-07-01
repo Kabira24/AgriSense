@@ -172,6 +172,57 @@
             </a>
           </div>
         </div>
+
+        <!-- Live Sensor Feed Card -->
+        <div class="glass-card sensor-feed-card" id="sensor-feed-card">
+          <div class="sensor-feed-header">
+            <div class="sensor-feed-title-row">
+              <span class="sensor-feed-icon">📡</span>
+              <div>
+                <h2 class="sensor-feed-title">Live Sensor Feed</h2>
+                <p class="sensor-feed-sub">IoT Field Sensor Readings</p>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="sensor-readings-grid">
+            <div class="sensor-reading-item">
+              <span class="sensor-reading-icon">🌡️</span>
+              <div class="sensor-reading-details">
+                <span class="sensor-reading-label">Temperature</span>
+                <span class="sensor-reading-val" id="sensor-temp">--</span>
+                <span class="sensor-reading-unit">°C</span>
+              </div>
+            </div>
+            <div class="sensor-reading-item">
+              <span class="sensor-reading-icon">💧</span>
+              <div class="sensor-reading-details">
+                <span class="sensor-reading-label">Humidity</span>
+                <span class="sensor-reading-val" id="sensor-humidity">--</span>
+                <span class="sensor-reading-unit">%</span>
+              </div>
+            </div>
+            <div class="sensor-reading-item">
+              <span class="sensor-reading-icon">🌱</span>
+              <div class="sensor-reading-details">
+                <span class="sensor-reading-label">Soil Moisture</span>
+                <span class="sensor-reading-val" id="sensor-moisture">--</span>
+                <span class="sensor-reading-unit">%</span>
+              </div>
+            </div>
+            <div class="sensor-reading-item">
+              <span class="sensor-reading-icon">🧪</span>
+              <div class="sensor-reading-details">
+                <span class="sensor-reading-label">Soil pH</span>
+                <span class="sensor-reading-val" id="sensor-ph">--</span>
+                <span class="sensor-reading-unit">pH</span>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
       </div>
 
       <!-- ── TAB 2: Crop Analysis ────────────────────────────────────────────── -->
@@ -185,7 +236,32 @@
             </div>
             
             <form id="predict-form" novalidate>
-              <!-- Weather Widget (Location autofill) -->
+              <!-- Input Mode Toggle (Manual / Live Sensor) -->
+            <div class="mode-toggle-widget" id="mode-toggle-widget">
+              <div class="mode-toggle-header">
+                <span class="mode-toggle-icon">📡</span>
+                <div>
+                  <p class="mode-toggle-title">Input Mode</p>
+                  <p class="mode-toggle-sub">Choose how to populate soil parameters</p>
+                </div>
+              </div>
+              <div class="mode-toggle-buttons" role="group" aria-label="Input mode selection">
+                <button type="button" class="mode-btn active" id="mode-manual-btn" data-mode="manual">
+                  ✍️ Manual Mode
+                </button>
+                <button type="button" class="mode-btn" id="mode-sensor-btn" data-mode="sensor">
+                  📡 Live Sensor Mode
+                </button>
+              </div>
+              <!-- Live sensor status banner (visible in sensor mode) -->
+              <div class="sensor-mode-status" id="sensor-mode-status" hidden>
+                <span class="sensor-pulse"></span>
+                <span id="sensor-mode-text">Fetching sensor data every 10 seconds…</span>
+              </div>
+            </div>
+
+            <!-- Weather Widget (Location autofill) -->
+
               <div class="weather-widget" id="weather-widget" style="margin-bottom: 20px;">
                 <div class="weather-widget-header">
                   <span class="ww-icon">🌤️</span>
@@ -617,6 +693,24 @@
                 <span id="health-planner-label">offline</span>
               </span>
               <span class="diagnostic-url">/planner/schedule</span>
+            </div>
+          </div>
+
+          <!-- Sensor Feed Service -->
+          <div class="glass-card diagnostic-card">
+            <div class="diagnostic-header">
+              <span class="diagnostic-name">📡 Live Sensor Feed</span>
+              <span class="service-port">Port 8006</span>
+            </div>
+            <p class="service-desc">
+              IoT sensor abstraction layer. Streams field readings (temperature, humidity, soil moisture, soil pH) to the dashboard in real time.
+            </p>
+            <div class="diagnostic-footer">
+              <span class="diagnostic-status">
+                <span class="diagnostic-dot" id="health-sensor-dot"></span>
+                <span id="health-sensor-label">offline</span>
+              </span>
+              <span class="diagnostic-url">/latest-sensor</span>
             </div>
           </div>
         </div>

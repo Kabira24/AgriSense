@@ -1,0 +1,94 @@
+{
+  "crop_id": "maize",
+  "display_name": "Maize",
+  "crop_type": "Cereal",
+  "season": "Kharif",
+  "total_duration_days": 110,
+  "stages": {
+    "sowing": {
+      "planting_window": "June 15 – July 15",
+      "method": "Dibbling or Drilling in lines",
+      "seed_rate": {
+        "value_range_kg_ha": [18, 22],
+        "notes": "18-22 kg/ha is sufficient to maintain standard plant density."
+      },
+      "sowing_depth_cm": {
+        "min": 4.0,
+        "max": 5.0
+      },
+      "row_spacing_cm": 60.0,
+      "plant_spacing_cm": 20.0,
+      "soil_conditions": "Well-drained silty loam to clay loam soils with high organic matter, pH 6.0-7.0."
+    },
+    "irrigation": [
+      {
+        "stage_name": "Knee-High Stage",
+        "days_after_sowing": 30,
+        "importance": "Moderate",
+        "water_depth_mm": 30,
+        "notes": "Ensure moderate moisture to support stem development."
+      },
+      {
+        "stage_name": "Tasseling Stage",
+        "days_after_sowing": 55,
+        "importance": "Critical",
+        "water_depth_mm": 40,
+        "notes": "Critical water phase. Moisture stress during tasseling drastically drops yield."
+      },
+      {
+        "stage_name": "Silking & Milk Stage",
+        "days_after_sowing": 75,
+        "importance": "Critical",
+        "water_depth_mm": 40,
+        "notes": "Critical phase. Support cob grain filling."
+      }
+    ],
+    "fertilizer": [
+      {
+        "stage_name": "Basal Application",
+        "days_after_sowing": 0,
+        "nutrients_kg_ha": {
+          "N": 30,
+          "P": 60,
+          "K": 40
+        },
+        "method": "Band placement during sowing line creation",
+        "notes": "Incorporate full P and K doses with 25% of the Nitrogen dose basal."
+      },
+      {
+        "stage_name": "First Top Dressing (Knee-High)",
+        "days_after_sowing": 35,
+        "nutrients_kg_ha": {
+          "N": 45,
+          "P": 0,
+          "K": 0
+        },
+        "method": "Side dressing between rows",
+        "notes": "Apply nitrogen along the plant row after light weeding."
+      },
+      {
+        "stage_name": "Second Top Dressing (Tasseling)",
+        "days_after_sowing": 60,
+        "nutrients_kg_ha": {
+          "N": 45,
+          "P": 0,
+          "K": 0
+        },
+        "method": "Broadcasting in moist soil",
+        "notes": "Boosts grain development in the cobs."
+      }
+    ],
+    "harvest": {
+      "harvest_window": "October 1 – October 31",
+      "days_after_sowing": 110,
+      "maturity_indicators": [
+        "Husk cover turns yellow and papery dry",
+        "Black layer forms at the tip of the maize kernels"
+      ],
+      "optimal_grain_moisture_pct": 20.0,
+      "expected_yield_range_t_ha": [4.0, 6.0],
+      "harvest_method": "Manual plucking of cobs followed by crop cutting",
+      "notes": "Dry harvested cobs in the sun before dehusking and shelling to lower moisture to 14% for storage."
+    }
+  }
+}

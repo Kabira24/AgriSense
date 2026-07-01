@@ -1,0 +1,65 @@
+{
+  "crop_id": "blackgram",
+  "display_name": "Blackgram",
+  "crop_type": "Pulse",
+  "season": "Kharif",
+  "total_duration_days": 80,
+  "stages": {
+    "sowing": {
+      "planting_window": "June 15 – July 15",
+      "method": "Line Sowing or Broadcasting",
+      "seed_rate": {
+        "value_range_kg_ha": [15, 20],
+        "notes": "15-20 kg/ha for Kharif sowing; Rabi sowing may require 22-25 kg/ha."
+      },
+      "sowing_depth_cm": {
+        "min": 4.0,
+        "max": 5.0
+      },
+      "row_spacing_cm": 30.0,
+      "plant_spacing_cm": 10.0,
+      "soil_conditions": "Well-aerated sandy loam to clayey loam soils with pH 6.5-7.5."
+    },
+    "irrigation": [
+      {
+        "stage_name": "Flower Initiation Stage",
+        "days_after_sowing": 35,
+        "importance": "Critical",
+        "water_depth_mm": 20,
+        "notes": "Critical moisture stage. Moisture stress leads to flower drop."
+      },
+      {
+        "stage_name": "Pod Filling Stage",
+        "days_after_sowing": 55,
+        "importance": "Critical",
+        "water_depth_mm": 25,
+        "notes": "Ensure sufficient moisture during pod elongation and seed filling."
+      }
+    ],
+    "fertilizer": [
+      {
+        "stage_name": "Basal Application",
+        "days_after_sowing": 0,
+        "nutrients_kg_ha": {
+          "N": 20,
+          "P": 40,
+          "K": 20
+        },
+        "method": "Band placement below seed line",
+        "notes": "Legume crop requires lower nitrogen basal dressing due to rhizobium root nodule fixation."
+      }
+    ],
+    "harvest": {
+      "harvest_window": "September 1 – September 20",
+      "days_after_sowing": 80,
+      "maturity_indicators": [
+        "Pods turn dark brown or blackish-grey",
+        "Leaves dry up and shed from the plant"
+      ],
+      "optimal_grain_moisture_pct": 14.0,
+      "expected_yield_range_t_ha": [0.8, 1.2],
+      "harvest_method": "Scything or pulling up entire plants manually",
+      "notes": "Thresh harvested crop after 3-4 days of sun drying."
+    }
+  }
+}
